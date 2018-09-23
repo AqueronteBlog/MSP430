@@ -25,10 +25,8 @@ extern "C" {
 
 /**@brief Function prototypes.
  */
-void conf_LFCLK  ( void );
+void conf_WDT    ( void );
 void conf_GPIO   ( void );
-void conf_RTC1   ( void );
-void conf_UART   ( void );
 
 
 /**@brief Constants.
