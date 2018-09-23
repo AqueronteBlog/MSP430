@@ -62,8 +62,8 @@
 							</tool>
 							<tool id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.exe.linkerDebug.101477243" name="MSP430 Linker" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.exe.linkerDebug">
 								<option id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.linkerID.LIBRARY.1051091666" name="Include library file or command file as input (--library, -l)" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.linkerID.LIBRARY" useByScannerDiscovery="false" valueType="libs">
-									<listOptionValue builtIn="false" value="libmpu_init.a"/>
 									<listOptionValue builtIn="false" value="libmath.a"/>
+									<listOptionValue builtIn="false" value="libmpu_init.a"/>
 									<listOptionValue builtIn="false" value="libc.a"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.linkerID.DEFINE.1204971775" name="Pre-define preprocessor macro _name_ to _value_ (--define)" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.linkerID.DEFINE" valueType="definedSymbols">
@@ -93,7 +93,7 @@
 							<tool id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.hex.516341027" name="MSP430 Hex Utility" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.hex">
 								<option id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.hex.ROMWIDTH.1119165765" name="Specify rom width (--romwidth, -romwidth=width)" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.hex.ROMWIDTH" useByScannerDiscovery="false" value="8" valueType="string"/>
 								<option id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.hex.MEMWIDTH.2141852716" name="Specify memory width (--memwidth, -memwidth=width)" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.hex.MEMWIDTH" useByScannerDiscovery="false" value="8" valueType="string"/>
-								<option id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.hex.TOOL_ENABLE.1722530730" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.hex.TOOL_ENABLE" value="false" valueType="boolean"/>
+								<option id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.hex.TOOL_ENABLE.1722530730" name="Enable tool" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.hex.TOOL_ENABLE" value="false" valueType="boolean"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
