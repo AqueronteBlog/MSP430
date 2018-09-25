@@ -36,10 +36,10 @@
 void conf_WDT  ( void )
 {
     /* The watchdog is disabled  */
-    WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
+    WDTCTL   =   ( WDTPW | WDTHOLD );   // stop watchdog timer
 
     /* Disable the GPIO power-on default high-impedance mode to activate previously configured port settings     */
-    PM5CTL0 &= ~LOCKLPM5;
+    PM5CTL0 &=  ~LOCKLPM5;
 }
 
 
@@ -68,6 +68,9 @@ void conf_WDT  ( void )
 void conf_GPIO  ( void )
 {
     /* Configure the LEDs ( output low ) on PORT1   */
+    P1SEL0  &=  ~( LED1 | LED2 );
+    P1SEL1  &=  ~( LED1 | LED2 );
+
     P1OUT   &=  ~( LED1 | LED2 );
     P1DIR   |=   ( LED1 | LED2 );
 }
