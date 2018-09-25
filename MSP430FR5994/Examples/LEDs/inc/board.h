@@ -23,8 +23,8 @@ extern "C" {
 /**@brief LEDs.
  */
 typedef enum{
-  LED1  = 0x00,               /*!<   LED1: P1.0   */
-  LED2  = 0x01                /*!<   LED2: P1.1   */
+  LED1  = BIT0,               /*!<   LED1: P1.0   */
+  LED2  = BIT1                /*!<   LED2: P1.1   */
 } EXP430FR5994_board_leds_t;
 
 
