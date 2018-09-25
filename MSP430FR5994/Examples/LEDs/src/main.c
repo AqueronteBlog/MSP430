@@ -1,9 +1,7 @@
 /**
  * @brief       main.c
- * @details     This example shows how to work with the external device: MAX44009. Every 2 seconds, a new
- *              Lux value is gotten and transmitted through the UART ( Baud Rate: 115200 ).
+ * @details     This example shows how to blink the both LEDs on the board.
  *
- *              The rest of the time, the microcontroller is in low power.
  *
  * @return      N/A
  *
@@ -39,13 +37,7 @@ void myDelay    ( uint16_t myCounter );
  */
 int main(void)
 {
-    /* The watchdog is disabled  */
-        WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
-
-        /* Disable the GPIO power-on default high-impedance mode to activate previously configured port settings     */
-        PM5CTL0 &= ~LOCKLPM5;
-
-    //conf_WDT  ();
+    conf_WDT  ();
     conf_GPIO ();
 
 
@@ -54,11 +46,11 @@ int main(void)
     {
         P1OUT   |=   LED1;      // LED 1 on
         P1OUT   &=  ~LED2;      // LED 2 off
-        myDelay ( 60000U );
+        myDelay ( 0x2323 );
 
         P1OUT   &=  ~LED1;      // LED 1 off
         P1OUT   |=   LED2;      // LED 2 on
-        myDelay ( 60000U );
+        myDelay ( 0x2323 );
     }
 }
 
