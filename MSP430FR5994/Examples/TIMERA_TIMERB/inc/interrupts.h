@@ -6,8 +6,8 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        19/September/2018
- * @version     19/September/2018    The ORIGIN
+ * @date        28/September/2018
+ * @version     28/September/2018    The ORIGIN
  * @warning     N/A
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
@@ -27,7 +27,7 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-
+__interrupt void TIMER0_A0_ISR ( void );
 
 
 
