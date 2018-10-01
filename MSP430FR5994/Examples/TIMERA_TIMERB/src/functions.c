@@ -139,6 +139,12 @@ void conf_TimerA  ( void )
  * @brief       void conf_TimerB  ( void )
  * @details     It configures the TimerB.
  *
+ *                  Timer B0:
+ *                      - Timer B0: Up mode
+ *                      - ACLK clock ( f_TB0/1 = ACLK = VLOCLK ~ 9.4KHz )
+ *                      - Interrupt enabled
+ *                      - Timer B0 overflow ~ 0.25s ( Overflow: 2350/9.4kHz = 0.25s )
+ *
  *
  * @param[in]    N/A.
  *
@@ -148,12 +154,39 @@ void conf_TimerA  ( void )
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        30/September/2018
- * @version     30/September/2018      The ORIGIN
+ * @date        1/October/2018
+ * @version     1/October/2018      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
 void conf_TimerB  ( void )
 {
+    /* Timer TB0:
+     *  - Reset TimerB0 clock
+     *  - Reset input divider
+     *  - Stop TimerB0
+     *  - TimerB0 interrupt disabled
+     *  - Reset TimerB0 flag
+     */
+    TB0CTL  &=  ~( TBSSEL | ID | MC | TBIE | TBIFG );
 
+    /* No capture mode   */
+    TB0CCTL0    &=  ~( CM );
+
+    /* Timer TB0:
+     *  - TimerB0 clock: ACLK
+     *  - Internal divider: /1
+     *  - TimerB0 interrupt enabled
+     */
+    TB0CTL  |=   ( TBSSEL__ACLK | ID_0 | TBIE );
+    TB0EX0  &=  ~( TBIDEX );
+
+    /*  Capture/Compare register to generate a delay of about 0.25s   */
+    TB0CCR0  =   2350;
+
+    /* Timer TB0:
+     *  - TimerB0 mode: Up mode
+     *  - TimerB0 clear
+     */
+    TB0CTL  |=   ( MC__UP | TBCLR );
 }
