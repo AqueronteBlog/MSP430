@@ -44,10 +44,6 @@ int main(void)
 
     while ( 1 )
     {
-        P1OUT   |=   LED1;      // LED 1 on
-        P1OUT   &=  ~LED2;      // LED 2 off
 
-        P1OUT   &=  ~LED1;      // LED 1 off
-        P1OUT   |=   LED2;      // LED 2 on
     }
 }
