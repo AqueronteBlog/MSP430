@@ -28,6 +28,7 @@ extern "C" {
 /**@brief Subroutine prototypes.
  */
 __interrupt void TIMER0_A0_ISR ( void );
+__interrupt void TIMER0_B0_ISR ( void );
 
 
 
