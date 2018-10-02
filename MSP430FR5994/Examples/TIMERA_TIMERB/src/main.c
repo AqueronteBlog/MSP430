@@ -16,6 +16,8 @@
 #include "board.h"
 #include "variables.h"
 #include "functions.h"
+#include "interrupts.h"
+
 
 /**@brief Constants.
  */
@@ -37,9 +39,13 @@
 int main(void)
 {
     conf_WDT    ();
+    conf_CLK    ();
     conf_GPIO   ();
     conf_TimerA ();
     conf_TimerB ();
+
+    /* All interrupts are enabled    */
+    __enable_interrupt();
 
 
     while ( 1 )
