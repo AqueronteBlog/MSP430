@@ -17,7 +17,7 @@
 
 /**
  * @brief       void conf_WDT  ( void )
- * @details     It disabled the watchdog and GPIO power-on default high-impedance mode.
+ * @details     It disables the watchdog and GPIO power-on default high-impedance mode.
  *
  *
  * @param[in]    N/A.
@@ -45,6 +45,49 @@ void conf_WDT  ( void )
 
 
 /**
+ * @brief       void conf_CLK  ( void )
+ * @details     It configures the clock sources.
+ *
+ *                  ACLK:   VLOCLK ~ 9.4KHz
+ *
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        2/October/2018
+ * @version     2/October/2018      The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void conf_CLK  ( void )
+{
+    /* Unlock register  */
+    CSCTL0_H   =   CSKEY_H;
+
+    /* Enables VLO clock     */
+    CSCTL4  &=  ~VLOOFF;
+    CSCTL4  |=   VLOOFF_0;
+
+    /* ACLK = VLOCLK    */
+    CSCTL2  &=   ~SELA;
+    CSCTL2  |=    SELA__VLOCLK;
+
+    /* ACLK = ACLK/1    */
+    CSCTL3  &=  ~DIVA;
+    CSCTL3  |=   DIVA_0;
+
+    /* Lock register     */
+    CSCTL0_H   =   0x01;
+}
+
+
+
+/**
  * @brief       void conf_GPIO  ( void )
  * @details     It configures GPIO.
  *
@@ -61,7 +104,8 @@ void conf_WDT  ( void )
  *
  * @author      Manuel Caballero
  * @date        28/September/2018
- * @version     28/September/2018      The ORIGIN
+ * @version     2/October/2018      LED1 OFF, LED2 ON at the beginning
+ *              28/September/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -71,7 +115,8 @@ void conf_GPIO  ( void )
     P1SEL0  &=  ~( LED1 | LED2 );
     P1SEL1  &=  ~( LED1 | LED2 );
 
-    P1OUT   &=  ~( LED1 | LED2 );
+    P1OUT   &=  ~( LED1 );
+    P1OUT   |=   LED2;
     P1DIR   |=   ( LED1 | LED2 );
 }
 
