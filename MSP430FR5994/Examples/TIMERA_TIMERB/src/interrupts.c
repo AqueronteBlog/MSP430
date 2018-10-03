@@ -15,7 +15,7 @@
 
 
 /**
- * @brief       TIMER0_A0_ISR interrupt service routine
+ * @brief       TIMER0_A1_ISR interrupt service routine
  * @details     Subroutine for TimerA0.
  *
  *
@@ -32,8 +32,8 @@
  * @pre         N/A
  * @warning     N/A
  */
-#pragma vector = TIMER0_A0_VECTOR
-__interrupt void TIMER0_A0_ISR ( void )
+#pragma vector = TIMER0_A1_VECTOR
+__interrupt void TIMER0_A1_ISR ( void )
 {
     switch ( __even_in_range ( TA0IV, TAIV__TAIFG ) )
     {
@@ -79,8 +79,8 @@ __interrupt void TIMER0_A0_ISR ( void )
 
 
 /**
- * @brief       TIMER0_B0_ISR interrupt service routine
- * @details     Subroutine for TimerB0.
+ * @brief       TIMER0_B1_ISR interrupt service routine
+ * @details     Subroutine for TimerB1.
  *
  *
  * @param[in]    N/A.
@@ -96,8 +96,8 @@ __interrupt void TIMER0_A0_ISR ( void )
  * @pre         N/A
  * @warning     N/A
  */
-#pragma vector = TIMER0_B0_VECTOR
-__interrupt void TIMER0_B0_ISR ( void )
+#pragma vector = TIMER0_B1_VECTOR
+__interrupt void TIMER0_B1_ISR ( void )
 {
     switch ( __even_in_range ( TB0IV, TBIV__TBIFG ) )
     {
