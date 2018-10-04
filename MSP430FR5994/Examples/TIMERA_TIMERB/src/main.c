@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to blink the both LEDs on the board.
+ * @details     This example shows how to blink the both LEDs on the board by interrupts.
  *
  *
  * @return      N/A
@@ -8,8 +8,8 @@
  * @author      Manuel Caballero
  * @date        28/September/2018
  * @version     28/September/2018    The ORIGIN
- * @pre         This firmware was tested on the nrf51-DK with EmBitz 1.11 rev 0 ( SDK 1.1.0 ).
- * @warning     Softdevice S310 was used although the file's name is S130. The softdevice is not used in this example anyway because of Bluetooth was not used.
+ * @pre         This firmware was tested on the MSP-EXP430FR5994 with CCS vs8.2.0.00007.
+ * @warning     N/A.
  * @pre         This code belongs to AqueronteBlog ( http://unbarquero.blogspot.com ).
  */
 #include <msp430.h> 
