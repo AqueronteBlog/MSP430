@@ -130,7 +130,7 @@ void conf_GPIO  ( void )
  *                      - Timer A0: Up mode
  *                      - ACLK clock ( f_TA0/1 = ACLK = VLOCLK ~ 9.4KHz )
  *                      - Interrupt enabled
- *                      - Timer A0 overflow ~ 0.25s ( Overflow: 2350/9.4kHz = 0.25s )
+ *                      - Timer A0 overflow ~ 0.15s ( Overflow: 1410/9.4kHz = 0.15s )
  *
  *
  * @param[in]    N/A.
@@ -142,7 +142,8 @@ void conf_GPIO  ( void )
  *
  * @author      Manuel Caballero
  * @date        30/September/2018
- * @version     30/September/2018      The ORIGIN
+ * @version     4/October/2018         Overflow was changed to 0.15s instead of 0.25s
+ *              30/September/2018      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -168,8 +169,8 @@ void conf_TimerA  ( void )
     TA0CTL  |=   ( TASSEL__ACLK | ID_0 | TAIE );
     TA0EX0  &=  ~( TAIDEX );
 
-    /*  Capture/Compare register to generate a delay of about 0.25s   */
-    TA0CCR0  =   2350;
+    /*  Capture/Compare register to generate a delay of about 0.15s   */
+    TA0CCR0  =   1410;
 
     /* Timer TA0:
      *  - TimerA0 mode: Up mode
@@ -188,7 +189,7 @@ void conf_TimerA  ( void )
  *                      - Timer B0: Up mode
  *                      - ACLK clock ( f_TB0/1 = ACLK = VLOCLK ~ 9.4KHz )
  *                      - Interrupt enabled
- *                      - Timer B0 overflow ~ 0.25s ( Overflow: 2350/9.4kHz = 0.25s )
+ *                      - Timer B0 overflow ~ 0.15s ( Overflow: 1410/9.4kHz = 0.15s )
  *
  *
  * @param[in]    N/A.
@@ -200,7 +201,8 @@ void conf_TimerA  ( void )
  *
  * @author      Manuel Caballero
  * @date        1/October/2018
- * @version     1/October/2018      The ORIGIN
+ * @version     4/October/2018      Overflow was changed to 0.15s instead of 0.25s
+ *              1/October/2018      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -226,8 +228,8 @@ void conf_TimerB  ( void )
     TB0CTL  |=   ( TBSSEL__ACLK | ID_0 | TBIE );
     TB0EX0  &=  ~( TBIDEX );
 
-    /*  Capture/Compare register to generate a delay of about 0.25s   */
-    TB0CCR0  =   2350;
+    /*  Capture/Compare register to generate a delay of about 0.15s   */
+    TB0CCR0  =   1410;
 
     /* Timer TB0:
      *  - TimerB0 mode: Up mode
