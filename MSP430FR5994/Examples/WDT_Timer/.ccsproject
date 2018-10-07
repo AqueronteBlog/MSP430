@@ -13,5 +13,9 @@
 	<createSlaveProjects value=""/>
 	<templateProperties value="id=com.ti.common.project.core.emptyProjectWithMainTemplate_msp430"/>
 	<filesToOpen value="main.c"/>
+<<<<<<< HEAD
 	<isTargetManual value="false"/>
+=======
+	<isTargetManual value="true"/>
+>>>>>>> 86fa5b56019d0563b446ed859be918e610d9c59a
 </projectOptions>
