@@ -55,6 +55,7 @@
 									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}/src}"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compilerID.ADVICE__POWER.590119177" name="Enable checking of ULP power rules (--advice:power)" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compilerID.ADVICE__POWER" useByScannerDiscovery="false" value="all" valueType="string"/>
+								<option id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compilerID.OPT_LEVEL.604320861" name="Optimization level (--opt_level, -O)" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compilerID.OPT_LEVEL" value="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compilerID.OPT_LEVEL.off" valueType="enumerated"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compiler.inputType__C_SRCS.325933487" name="C Sources" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compiler.inputType__C_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compiler.inputType__CPP_SRCS.596600796" name="C++ Sources" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compiler.inputType__CPP_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compiler.inputType__ASM_SRCS.1883501093" name="Assembly Sources" superClass="com.ti.ccstudio.buildDefinitions.MSP430_18.1.compiler.inputType__ASM_SRCS"/>
