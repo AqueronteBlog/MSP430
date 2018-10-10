@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to blink the both LEDs on the board by interrupts.
+ * @details     This example shows how to work with the WDT_A as a timer.
  *
  *
  * @return      N/A
