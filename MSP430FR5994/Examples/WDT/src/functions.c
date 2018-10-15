@@ -40,12 +40,12 @@ void conf_WDT  ( void )
 
     /* Configure the Watchdog
      *  WDT clock: VLOCK
-     *  WDT as an interval timer
+     *  WDT as watchdog
      *  WDT timer counter clear
      *  WDT timer interval select: f_WDT/2^9 ~ 9.4KhZ/2^9 = 9.4KhZ/512 ( ~54.47ms at 9.4KHz )
      *  Start WDT timer
      */
-    WDTCTL   =   ( WDTPW | WDTHOLD__UNHOLD | WDTSSEL__VLOCLK | WDTTMSEL_1 | WDTCNTCL_1 | WDTIS__512 );
+    WDTCTL   =   ( WDTPW | WDTHOLD__UNHOLD | WDTSSEL__VLOCLK | WDTTMSEL_0 | WDTCNTCL_1 | WDTIS__512 );
 
 
     /* Disable the GPIO power-on default high-impedance mode to activate previously configured port settings     */
