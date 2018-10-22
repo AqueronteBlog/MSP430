@@ -1,6 +1,6 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the WDT_A as a timer.
+ * @details     [todo]This example shows how to work with the WDT_A as a watchdog.
  *
  *
  * @return      N/A
