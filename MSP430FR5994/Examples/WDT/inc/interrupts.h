@@ -27,7 +27,6 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-__interrupt void WDT_A_ISR ( void );
 
 
 
