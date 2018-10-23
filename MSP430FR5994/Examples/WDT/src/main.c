@@ -1,6 +1,7 @@
 /**
  * @brief       main.c
- * @details     [todo]This example shows how to work with the WDT_A as a watchdog.
+ * @details     This example shows how to work with the WDT_A as a watchdog. The WDT is not refreshed
+ *              so a PUC is generated.
  *
  *
  * @return      N/A
@@ -38,18 +39,21 @@
  */
 int main(void)
 {
+    uint16_t i = 0U;
+
+
     /* The watchdog is disabled  */
     WDTCTL   =   ( WDTPW | WDTHOLD );   // stop watchdog timer
 
     conf_CLK    ();
     conf_GPIO   ();
+
+    /* Little delay to check changes on the LEDs     */
+    for ( i = 0U; i < 0x2323; i++ );
+
     conf_WDT    ();
 
-
-
-    /* All interrupts are enabled    */
-    __enable_interrupt();
-
+    P1OUT   ^=   ( LED1 | LED2 );              // Change LED1 and LED2 state
 
     while ( 1 )
     {
