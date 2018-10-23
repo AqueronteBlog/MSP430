@@ -29,15 +29,13 @@
  *
  * @author      Manuel Caballero
  * @date        14/October/2018
- * @version     14/October/2018      The ORIGIN
+ * @version     23/October/2018      WDT does not need interrupts
+ *              14/October/2018      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
 void conf_WDT  ( void )
 {
-    /* Watchdog timer interrupt enable   */
-    SFRIE1  |=   WDTIE__ENABLE;
-
     /* Configure the Watchdog
      *  WDT clock: VLOCK
      *  WDT as watchdog
