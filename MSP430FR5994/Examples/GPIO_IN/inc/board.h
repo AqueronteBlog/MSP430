@@ -28,6 +28,13 @@ typedef enum{
 } EXP430FR5994_board_leds_t;
 
 
+/**@brief Buttons.
+ */
+typedef enum{
+  S1  = BIT6,                /*!<   S1: P5.6     */
+  S2  = BIT5                 /*!<   S2: P5.5     */
+} EXP430FR5994_board_buttons_t;
+
 
 #ifdef __cplusplus
 }
