@@ -38,10 +38,6 @@
  */
 int main(void)
 {
-    /* The watchdog is disabled  */
-    WDTCTL   =   ( WDTPW | WDTHOLD );   // stop watchdog timer
-
-    conf_CLK    ();
     conf_GPIO   ();
     conf_WDT    ();
 
