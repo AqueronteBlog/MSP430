@@ -17,7 +17,7 @@
 
 /**
  * @brief       void conf_WDT  ( void )
- * @details     Watchdog as an interval timer and GPIO power-on default high-impedance mode.
+ * @details     Watchdog is disabled and GPIO power-on default high-impedance mode.
  *
  *
  * @param[in]    N/A.
@@ -29,70 +29,18 @@
  *
  * @author      Manuel Caballero
  * @date        31/October/2018
- * @version     31/October/2018      The ORIGIN
+ * @version     1/November/2018      WDT is disabled
+ *              31/October/2018      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
 void conf_WDT  ( void )
 {
-    /* Watchdog timer interrupt enable   */
-    SFRIE1  |=   WDTIE__ENABLE;
-
-    /* Configure the Watchdog
-     *  WDT clock: VLOCK
-     *  WDT as an interval timer
-     *  WDT timer counter clear
-     *  WDT timer interval select: f_WDT/2^9 ~ 9.4KhZ/2^9 = 9.4KhZ/512 ( ~54.47ms at 9.4KHz )
-     *  Start WDT timer
-     */
-    WDTCTL   =   ( WDTPW | WDTHOLD__UNHOLD | WDTSSEL__VLOCLK | WDTTMSEL_1 | WDTCNTCL_1 | WDTIS__512 );
-
+    /* The watchdog is disabled  */
+    WDTCTL   =   ( WDTPW | WDTHOLD );   // stop watchdog timer
 
     /* Disable the GPIO power-on default high-impedance mode to activate previously configured port settings     */
     PM5CTL0 &=  ~LOCKLPM5;
-}
-
-
-
-/**
- * @brief       void conf_CLK  ( void )
- * @details     It configures the clock sources.
- *
- *                  ACLK:   VLOCLK ~ 9.4KHz
- *
- *
- * @param[in]    N/A.
- *
- * @param[out]   N/A.
- *
- *
- * @return      N/A
- *
- * @author      Manuel Caballero
- * @date        31/October/2018
- * @version     31/October/2018      The ORIGIN
- * @pre         N/A
- * @warning     N/A
- */
-void conf_CLK  ( void )
-{
-    /* Unlock register  */
-    CSCTL0_H   =   CSKEY_H;
-
-    /* Enables VLO clock     */
-    CSCTL4  &=  ~VLOOFF;
-    CSCTL4  |=   VLOOFF_0;
-
-    /* ACLK = VLOCLK    */
-    CSCTL2  &=  ~SELA;
-    CSCTL2  |=   SELA__VLOCLK;
-
-    /* ACLK = ACLK/1    */
-    CSCTL3  &=  ~DIVA;
-    CSCTL3  |=   DIVA_0;
-
-    /* Lock register     */
-    CSCTL0_H   =   0x01;
 }
 
 

@@ -26,7 +26,6 @@ extern "C" {
 /**@brief Function prototypes.
  */
 void conf_WDT    ( void );
-void conf_CLK    ( void );
 void conf_GPIO   ( void );
 
 
