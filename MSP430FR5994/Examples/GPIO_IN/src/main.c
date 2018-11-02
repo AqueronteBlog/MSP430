@@ -1,6 +1,9 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the WDT_A as a timer.
+ * @details     This example shows how to work with the GPIO<_IN with interrupts. Every time any
+ *              button is pressed ( S1 or S2 ) changes the state of the LED ( LED 1 or LED2 ).
+ *
+ *              The microcontroller remains in low power the rest of the time.
  *
  *
  * @return      N/A
@@ -42,13 +45,12 @@ int main(void)
     conf_WDT    ();
 
 
-
     /* All interrupts are enabled    */
     __enable_interrupt();
 
 
     while ( 1 )
     {
-        LPM3;
+        LPM4;
     }
 }
