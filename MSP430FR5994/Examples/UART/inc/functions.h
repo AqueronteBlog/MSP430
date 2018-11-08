@@ -27,6 +27,7 @@ extern "C" {
  */
 void conf_WDT    ( void );
 void conf_GPIO   ( void );
+void conf_UART   ( void );
 
 
 /**@brief Constants.

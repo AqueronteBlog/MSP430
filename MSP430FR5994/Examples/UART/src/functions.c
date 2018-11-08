@@ -52,6 +52,10 @@ void conf_WDT  ( void )
  *                      -- P1.0:    LED1
  *                      -- P1.1:    LED2
  *
+ *                  - PORT2:
+ *                      -- P2.0:    UCA0 UART TX
+ *                      -- P2.1:    UCA0 UART RX
+ *
  *                  - PORT5: Interrupt enabled
  *                      -- P5.5:    S2  ( BUTTON1 )
  *                      -- P5.6:    S1  ( BUTTON2 )
@@ -65,7 +69,8 @@ void conf_WDT  ( void )
  *
  * @author      Manuel Caballero
  * @date        7/November/2018
- * @version     7/November/2018   The ORIGIN
+ * @version     8/November/2018   UART0 pin-out was defined
+ *              7/November/2018   The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -92,4 +97,65 @@ void conf_GPIO  ( void )
 
     P1OUT   &=  ~( LED1 | LED2 );
     P1DIR   |=   ( LED1 | LED2 );
+
+    /* Configure the UART0 on PORT2   */
+    P2SEL0  &=  ~( UART0_TX | UART0_RX );
+    P2SEL1  |=   ( UART0_TX | UART0_RX );
+}
+
+
+
+/**
+ * @brief       void conf_UART  ( void )
+ * @details     It configures the UART. [todo]
+ *
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        7/November/2018
+ * @version     7/November/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void conf_UART  ( void )
+{
+    /* UART0 Software reset enable */
+    UCA0CTLW0   |=   UCSWRST__ENABLE;
+
+    /* UART0:
+     *  - Parity disabled
+     *  - MSB first select
+     *  - 8-bit data
+     *  - One stop bit
+     *  - UART mode
+     *  - Asynchronous mode
+     *  - UCLK clock
+     *  - Erroneous characters rejected and UCRXIFG is not set
+     *  - Received break characters do not set UCRXIFG
+     *  - Not dormant. All received characters set UCRXIFG
+     *  - Next frame transmitted is data
+     *  - Next frame transmitted is not a break
+     */
+    UCA0CTLW0   &=  ~( UCPEN | UC7BIT | UCSPB | UCMODE | UCSYNC | UCSSEL | UCRXEIE | UCBRKIE | UCDORM | UCTXADDR | UCTXBRK );
+    UCA0CTLW0   |=   ( UCSWRST__ENABLE | UCMSB );
+
+    /*  Baud-rate detection disabled    */
+    UCA0ABCTL   &=  ~( UCABDEN );
+
+    /*  IrDA encoder/decoder disabled    */
+    UCA0IRCTL   &=  ~( UCIREN );
+
+
+    /* UART0 Reset released for operation */
+    UCA0CTLW0   &=  ~UCSWRST__ENABLE;
+
+    /* Clean and Enable interrupts: Tx and Rx  */
+    UCA0IFG &=  ~( UCTXIFG | UCRXIFG );
+    UCA0IE  |=   ( UCTXIE | UCRXIE );
 }
