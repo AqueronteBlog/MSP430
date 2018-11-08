@@ -41,8 +41,9 @@
  */
 int main(void)
 {
-    conf_GPIO   ();
     conf_WDT    ();
+    conf_GPIO   ();
+    conf_UART   ();
 
 
     /* All interrupts are enabled    */
