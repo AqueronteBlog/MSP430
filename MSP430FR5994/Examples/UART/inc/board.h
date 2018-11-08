@@ -36,6 +36,14 @@ typedef enum{
 } EXP430FR5994_board_buttons_t;
 
 
+/**@brief UCA0: UART0.
+ */
+typedef enum{
+  UART0_TX  = BIT0,          /*!<   TX: P2.0     */
+  UART0_RX  = BIT1           /*!<   RX: P2.1     */
+} EXP430FR5994_board_uart0_t;
+
+
 #ifdef __cplusplus
 }
 #endif
