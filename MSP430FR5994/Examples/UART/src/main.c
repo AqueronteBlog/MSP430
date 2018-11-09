@@ -42,6 +42,7 @@
 int main(void)
 {
     conf_WDT    ();
+    conf_CLK    ();
     conf_GPIO   ();
     conf_UART   ();
 
