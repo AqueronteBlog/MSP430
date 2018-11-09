@@ -16,6 +16,53 @@
 
 
 /**
+ * @brief       void conf_CLK  ( void )
+ * @details     It configures the clock of the whole system.
+ *
+ *                  - MCLK = SMCLK = DCO = 8MHz
+ *                  - HFXT, VLO and LFXT Clock disabled
+ *
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        9/November/2018
+ * @version     9/November/2018      The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void conf_CLK  ( void )
+{
+    /* Unblock the clock registers  */
+    CSCTL0   =   CSKEY;
+
+    /* DCO ~ 8MHz    */
+    CSCTL1 &=  ~( DCORSEL | DCOFSEL );
+    CSCTL1 |=   DCOFSEL_6;
+
+    /* MCLK = SMCLK = DCO     */
+    CSCTL2  &=  ~( SELS | SELM );
+    CSCTL2  |=   ( SELS_3 | SELM_3 );
+
+    /*  SMCLK/1, MCLK/1     */
+    CSCTL3  &=  ~( DIVS | DIVM );
+
+    /*  SMCLK Clock enabled and HFXT, VLO and LFXT Clock disabled     */
+    CSCTL4  &=  ~( SMCLKOFF );
+    CSCTL4  |=   ( HFXTOFF | VLOOFF | LFXTOFF );
+
+    /* Block the clock registers  */
+    CSCTL0   =   0x01;
+}
+
+
+
+/**
  * @brief       void conf_WDT  ( void )
  * @details     Watchdog is disabled and GPIO power-on default high-impedance mode.
  *
@@ -109,6 +156,18 @@ void conf_GPIO  ( void )
  * @brief       void conf_UART  ( void )
  * @details     It configures the UART. [todo]
  *
+ *                  · BRCLK source clock: SMCLK = 20 MHz.
+ *                  · BuadRate = 115200:
+ *
+ *                      N = f_BRCLK/BaudRate = 20MHz/115200 ~ 173.61 = {INT} = 173
+ *
+ *                      N >= 16 -->  Oversampling ON (UCOS16 = 1)
+ *
+ *              Therefore:
+ *
+ *                  UCBRx = INT(N/16) = INT(173/16) = 10
+ *                  UCBRFx = ROUND[((N/16) - INT(N/16))·16] = ROUND[((20MHz/115200)/16 - INT((20MHz/115200)/16))·16] ~ 13.61 = 14
+ *
  *
  * @param[in]    N/A.
  *
@@ -145,10 +204,10 @@ void conf_UART  ( void )
     UCA0CTLW0   &=  ~( UCPEN | UC7BIT | UCSPB | UCMODE | UCSYNC | UCSSEL | UCRXEIE | UCBRKIE | UCDORM | UCTXADDR | UCTXBRK );
     UCA0CTLW0   |=   ( UCSWRST__ENABLE | UCMSB );
 
-    /*  Baud-rate detection disabled    */
+    /* Baud-rate detection disabled    */
     UCA0ABCTL   &=  ~( UCABDEN );
 
-    /*  IrDA encoder/decoder disabled    */
+    /* IrDA encoder/decoder disabled    */
     UCA0IRCTL   &=  ~( UCIREN );
 
 
