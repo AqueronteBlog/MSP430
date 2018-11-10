@@ -53,6 +53,6 @@ int main(void)
 
     while ( 1 )
     {
-        LPM4;
+        LPM1;
     }
 }
