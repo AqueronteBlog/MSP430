@@ -15,8 +15,8 @@
 
 
 /**
- * @brief       PORT5_ISR interrupt service routine
- * @details     Subroutine for PORT5.
+ * @brief       UART0_ISR interrupt service routine
+ * @details     Subroutine for UART0.
  *
  *
  * @param[in]    N/A.
@@ -27,50 +27,38 @@
  * @return      N/A
  *
  * @author      Manuel Caballero
- * @date        2/November/2018
- * @version     2/November/2018      The ORIGIN
+ * @date        10/November/2018
+ * @version     10/November/2018      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
-#pragma vector = PORT5_VECTOR
-__interrupt void PORT5_ISR ( void )
+#pragma vector = EUSCI_A0_VECTOR
+__interrupt void UART0_ISR ( void )
 {
-    switch ( __even_in_range ( P5IV, P5IV__P5IFG7 ) )
+    switch ( __even_in_range ( UCIV, UCIV_8 ) )
     {
-        case P5IV__P5IFG0:
-        /* Interrupt Source: Port 5.0 interrupt; Interrupt Flag: P5IFG0 ( Interrupt Priority: Highest )  */
+        case UCIV_0:
+        /* Interrupt Source:  No interrupt pending  */
             break;
 
-        case P5IV__P5IFG1:
-        /* Interrupt Source: Port 5.1 interrupt; Interrupt Flag: P5IFG1  */
+        case UCIV_2:
+        /* Interrupt Source: Receive buffer full; Interrupt Flag: UCRXIFG ( Interrupt Priority: Highest )  */
+
+            UCA0IFG &=  ~UCRXIFG;       // Reset flag
             break;
 
-        case P5IV__P5IFG2:
-        /* Interrupt Source: Port 5.2 interrupt; Interrupt Flag: P5IFG2  */
+        case UCIV_4:
+        /* Interrupt Source: Transmit buffer empty; Interrupt Flag: UCTXIFG  */
+
+            UCA0IFG &=  ~UCTXIFG;       // Reset flag
             break;
 
-        case P5IV__P5IFG3:
-        /* Interrupt Source: Port 5.3 interrupt; Interrupt Flag: P5IFG3  */
+        case UCIV_6:
+        /* Interrupt Source: Start bit received; Interrupt Flag: UCSTTIFG  */
             break;
 
-        case P5IV__P5IFG4:
-        /* Interrupt Source: Port 5.4 interrupt; Interrupt Flag: P5IFG4  */
-            break;
-
-        case P5IV__P5IFG5:
-        /* Interrupt Source: Port 5.5 interrupt; Interrupt Flag: P5IFG5  */
-            P1OUT   ^=   LED2;              // Change LED2 state
-            P5IFG   &=  ~( S2 );            // Reset flags
-            break;
-
-        case P5IV__P5IFG6:
-        /* Interrupt Source: Port 5.6 interrupt; Interrupt Flag: P5IFG6  */
-            P1OUT   ^=   LED1;              // Change LED1 state
-            P5IFG   &=  ~( S1 );            // Reset flags
-            break;
-
-        case P5IV__P5IFG7:
-        /* Interrupt Source: Port 5.7 interrupt; Interrupt Flag: P5IFG7 ( Interrupt Priority: Lowest )  */
+        case UCIV_8:
+        /* Interrupt Source: Transmit complete; Interrupt Flag: UCTXCPTIFG ( Interrupt Priority: Lowest )  */
             break;
 
         default:
