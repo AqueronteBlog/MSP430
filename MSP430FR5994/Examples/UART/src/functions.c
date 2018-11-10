@@ -154,19 +154,19 @@ void conf_GPIO  ( void )
 
 /**
  * @brief       void conf_UART  ( void )
- * @details     It configures the UART. [todo]
+ * @details     It configures the UART.
  *
- *                  · BRCLK source clock: SMCLK = 20 MHz.
+ *                  · BRCLK source clock: SMCLK = 8MHz.
  *                  · BuadRate = 115200:
  *
- *                      N = f_BRCLK/BaudRate = 20MHz/115200 ~ 173.61 = {INT} = 173
+ *                      N = f_BRCLK/BaudRate = 8MHz/115200 ~ 69.444 = {INT} = 69
  *
  *                      N >= 16 -->  Oversampling ON (UCOS16 = 1)
  *
  *              Therefore:
  *
- *                  UCBRx = INT(N/16) = INT(173/16) = 10
- *                  UCBRFx = ROUND[((N/16) - INT(N/16))·16] = ROUND[((20MHz/115200)/16 - INT((20MHz/115200)/16))·16] ~ 13.61 = 14
+ *                  UCBRx = INT(N/16) = INT(69/16) = 4
+ *                  UCBRFx = ROUND[((N/16) - INT(N/16))·16] = ROUND[((8MHz/115200)/16 - INT((8MHz/115200)/16))·16] ~ 5.44 = 5
  *
  *
  * @param[in]    N/A.
@@ -178,8 +178,10 @@ void conf_GPIO  ( void )
  *
  * @author      Manuel Caballero
  * @date        7/November/2018
- * @version     7/November/2018   The ORIGIN
- * @pre         N/A
+ * @version     10/November/2018  Baudrate was added.
+ *              7/November/2018   The ORIGIN
+ * @pre         For more info about Baud rates calculation, check out: Table 30-5. Recommended Settings for Typical Crystals and Baud Rates
+ *              in the User Guide ( SLAU367O )
  * @warning     N/A
  */
 void conf_UART  ( void )
@@ -194,7 +196,7 @@ void conf_UART  ( void )
      *  - One stop bit
      *  - UART mode
      *  - Asynchronous mode
-     *  - UCLK clock
+     *  - SMCLK clock
      *  - Erroneous characters rejected and UCRXIFG is not set
      *  - Received break characters do not set UCRXIFG
      *  - Not dormant. All received characters set UCRXIFG
@@ -202,7 +204,7 @@ void conf_UART  ( void )
      *  - Next frame transmitted is not a break
      */
     UCA0CTLW0   &=  ~( UCPEN | UC7BIT | UCSPB | UCMODE | UCSYNC | UCSSEL | UCRXEIE | UCBRKIE | UCDORM | UCTXADDR | UCTXBRK );
-    UCA0CTLW0   |=   ( UCSWRST__ENABLE | UCMSB );
+    UCA0CTLW0   |=   ( UCSWRST__ENABLE | UCMSB | UCSSEL__SMCLK );
 
     /* Baud-rate detection disabled    */
     UCA0ABCTL   &=  ~( UCABDEN );
@@ -210,6 +212,9 @@ void conf_UART  ( void )
     /* IrDA encoder/decoder disabled    */
     UCA0IRCTL   &=  ~( UCIREN );
 
+    /* Clock prescaler setting of the Baud rate generator    */
+    UCA0MCTLW    =   ( ( 0x55 << 8U ) | ( 5U << 4U ) | UCOS16 );        // UCBRS = 0xAA, UCBRF = 5 and oversampling enabled
+    UCA0BRW      =   4U;
 
     /* UART0 Reset released for operation */
     UCA0CTLW0   &=  ~UCSWRST__ENABLE;
