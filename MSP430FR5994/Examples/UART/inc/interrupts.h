@@ -38,7 +38,9 @@ __interrupt void UART0_ISR ( void );
 
 /**@brief Variables.
  */
-
+extern volatile myCommands_t    myRX_cmd;
+extern volatile uint8_t         *myPtr;
+extern volatile system_states_t myState;
 
 
 #ifdef __cplusplus
