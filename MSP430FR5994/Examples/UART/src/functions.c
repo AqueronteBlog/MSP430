@@ -38,26 +38,26 @@
  */
 void conf_CLK  ( void )
 {
-    /* Unblock the clock registers  */
+    /* Unblock the clock registers   */
     CSCTL0   =   CSKEY;
 
     /* DCO ~ 8MHz    */
     CSCTL1 &=  ~( DCORSEL | DCOFSEL );
     CSCTL1 |=   DCOFSEL_6;
 
-    /* MCLK = SMCLK = DCO     */
+    /* MCLK = SMCLK = DCO    */
     CSCTL2  &=  ~( SELS | SELM );
     CSCTL2  |=   ( SELS_3 | SELM_3 );
 
-    /*  SMCLK/1, MCLK/1     */
+    /* SMCLK/1, MCLK/1   */
     CSCTL3  &=  ~( DIVS | DIVM );
 
-    /*  SMCLK Clock enabled and HFXT, VLO and LFXT Clock disabled     */
+    /* SMCLK Clock enabled and HFXT, VLO and LFXT Clock disabled     */
     CSCTL4  &=  ~( SMCLKOFF );
     CSCTL4  |=   ( HFXTOFF | VLOOFF | LFXTOFF );
 
-    /* Block the clock registers  */
-    CSCTL0   =   0x01;
+    /* Block the clock registers     */
+    CSCTL0_H =   0x01;
 }
 
 
@@ -178,7 +178,8 @@ void conf_GPIO  ( void )
  *
  * @author      Manuel Caballero
  * @date        7/November/2018
- * @version     10/November/2018  Baudrate was added.
+ * @version     11/November/2018  Only Rx interrupt is enabled and LSB byte first
+ *              10/November/2018  Baudrate was added.
  *              7/November/2018   The ORIGIN
  * @pre         For more info about Baud rates calculation, check out: Table 30-5. Recommended Settings for Typical Crystals and Baud Rates
  *              in the User Guide ( SLAU367O )
@@ -191,7 +192,7 @@ void conf_UART  ( void )
 
     /* UART0:
      *  - Parity disabled
-     *  - MSB first select
+     *  - LSB first select
      *  - 8-bit data
      *  - One stop bit
      *  - UART mode
@@ -204,7 +205,7 @@ void conf_UART  ( void )
      *  - Next frame transmitted is not a break
      */
     UCA0CTLW0   &=  ~( UCPEN | UC7BIT | UCSPB | UCMODE | UCSYNC | UCSSEL | UCRXEIE | UCBRKIE | UCDORM | UCTXADDR | UCTXBRK );
-    UCA0CTLW0   |=   ( UCSWRST__ENABLE | UCMSB | UCSSEL__SMCLK );
+    UCA0CTLW0   |=   ( UCSWRST__ENABLE | UCSSEL__SMCLK );
 
     /* Baud-rate detection disabled    */
     UCA0ABCTL   &=  ~( UCABDEN );
@@ -213,13 +214,13 @@ void conf_UART  ( void )
     UCA0IRCTL   &=  ~( UCIREN );
 
     /* Clock prescaler setting of the Baud rate generator    */
-    UCA0MCTLW    =   ( ( 0x55 << 8U ) | ( 5U << 4U ) | UCOS16 );        // UCBRS = 0xAA, UCBRF = 5 and oversampling enabled
+    UCA0MCTLW    =   ( ( 0x55 << 8U ) | ( 5U << 4U ) | UCOS16 );        // UCBRS = 0x55, UCBRF = 5 and oversampling enabled
     UCA0BRW      =   4U;
 
     /* UART0 Reset released for operation */
     UCA0CTLW0   &=  ~UCSWRST__ENABLE;
 
-    /* Clean and Enable interrupts: Tx and Rx  */
+    /* Clean and Enable interrupts: Rx only  */
     UCA0IFG &=  ~( UCTXIFG | UCRXIFG );
-    UCA0IE  |=   ( UCTXIE | UCRXIE );
+    UCA0IE  |=   ( UCRXIE );
 }
