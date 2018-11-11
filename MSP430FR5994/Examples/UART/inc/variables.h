@@ -23,8 +23,21 @@ extern "C" {
 
 /**@brief Constants.
  */
+/**@brief Commands.
+ */
+typedef enum{
+  CMD_LED1  = BIT0,         /*!<   Command: LED1   */
+  CMD_LED2  = BIT1,         /*!<   Command: LED2   */
+  CMD_WRONG = BIT2          /*!<   Command: Wrong  */
+} myCommands_t;
 
 
+/**@brief States of the system.
+ */
+typedef enum{
+  STATE_LOW_POWER   = BIT0, /*!<   Low power state   */
+  STATE_ACTION      = BIT1  /*!<   Do something!     */
+} system_states_t;
 
 /**@brief Variables.
  */
