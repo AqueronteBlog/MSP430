@@ -221,3 +221,58 @@ void conf_UART  ( void )
     UCA0IFG &=  ~( UCTXIFG | UCRXIFG );
     UCA0IE  |=   ( UCRXIE );
 }
+
+
+
+/**
+ * @brief       void conf_ADC  ( void )
+ * @details     It configures the ADC.
+ *
+ *                  [todo]· BRCLK source clock: SMCLK = 8MHz.
+ *                  · BuadRate = 115200:
+ *
+ *                      N = f_BRCLK/BaudRate = 8MHz/115200 ~ 69.444 = {INT} = 69
+ *
+ *                      N >= 16 -->  Oversampling ON (UCOS16 = 1)
+ *
+ *              Therefore:
+ *
+ *                  UCBRx = INT(N/16) = INT(69/16) = 4
+ *                  UCBRFx = ROUND[((N/16) - INT(N/16))·16] = ROUND[((8MHz/115200)/16 - INT((8MHz/115200)/16))·16] ~ 5.44 = 5
+ *
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        19/November/2018
+ * @version     19/November/2018   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void conf_ADC  ( void )
+{
+    /* UART0 Software reset enable */
+    UCA0CTLW0   |=   UCSWRST__ENABLE;
+
+    /* UART0:
+     *  - Parity disabled
+     *  - LSB first select
+     *  - 8-bit data
+     *  - One stop bit
+     *  - UART mode
+     *  - Asynchronous mode
+     *  - SMCLK clock
+     *  - Erroneous characters rejected and UCRXIFG is not set
+     *  - Received break characters do not set UCRXIFG
+     *  - Not dormant. All received characters set UCRXIFG
+     *  - Next frame transmitted is data
+     *  - Next frame transmitted is not a break
+     */
+    UCA0CTLW0   &=  ~( UCPEN | UC7BIT | UCSPB | UCMODE | UCSYNC | UCSSEL | UCRXEIE | UCBRKIE | UCDORM | UCTXADDR | UCTXBRK );
+    UCA0CTLW0   |=   ( UCSWRST__ENABLE | UCSSEL__SMCLK );
+}
