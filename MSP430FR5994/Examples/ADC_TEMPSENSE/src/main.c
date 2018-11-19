@@ -55,6 +55,7 @@ int main(void)
     conf_CLK    ();
     conf_GPIO   ();
     conf_UART   ();
+    conf_ADC    ();
 
 
     /* All interrupts are enabled    */
