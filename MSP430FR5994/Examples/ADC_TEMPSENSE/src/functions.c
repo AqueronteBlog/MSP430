@@ -256,23 +256,25 @@ void conf_UART  ( void )
  */
 void conf_ADC  ( void )
 {
-    /* UART0 Software reset enable */
-    UCA0CTLW0   |=   UCSWRST__ENABLE;
+    /* ADC12_B Off and disabled   */
+    ADC12CTL0   &=  ~( ADC12ON | ADC12ENC );
 
-    /* UART0:
-     *  - Parity disabled
-     *  - LSB first select
-     *  - 8-bit data
-     *  - One stop bit
-     *  - UART mode
-     *  - Asynchronous mode
-     *  - SMCLK clock
-     *  - Erroneous characters rejected and UCRXIFG is not set
-     *  - Received break characters do not set UCRXIFG
-     *  - Not dormant. All received characters set UCRXIFG
-     *  - Next frame transmitted is data
-     *  - Next frame transmitted is not a break
+    /* ADC12_B:
+     *  ADC12_B predivider by 1
+     *  SAMPCON signal is sourced from the sample-input signal
+     *  The sample-input signal is not inverted
+     *  ADC12_B clock divider into 1
+     *  ADC12_B clock source:  ADC12OSC ( MODOSC )
+     *  Single-channel, single-conversion
+     *  Binary unsigned
+     *  ADC12_B resolution: 12 bit ( 14 clock cycle conversion time )
+     *  Regular power mode where sample rate is not restricted
+     *
      */
-    UCA0CTLW0   &=  ~( UCPEN | UC7BIT | UCSPB | UCMODE | UCSYNC | UCSSEL | UCRXEIE | UCBRKIE | UCDORM | UCTXADDR | UCTXBRK );
-    UCA0CTLW0   |=   ( UCSWRST__ENABLE | UCSSEL__SMCLK );
+    ADC12CTL1   &=  ~( ADC12PDIV | ADC12SHP | ADC12ISSH | ADC12DIV | ADC12SSEL | ADC12CONSEQ );
+    ADC12CTL2   &=  ~( ADC12RES | ADC12DF | ADC12PWRMD );
+    ADC12CTL2   |=   ADC12RES__12BIT;
+
+    /* Internal temperature sensor selected and ADC12_B conversion start address on A30 ( Internal temperature sensor )   */
+    ADC12CTL3   |=   ( ADC12TCMAP | ADC12CSTARTADD_30 );
 }
