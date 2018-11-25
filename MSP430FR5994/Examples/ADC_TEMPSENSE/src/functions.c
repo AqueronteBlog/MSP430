@@ -275,6 +275,20 @@ void conf_ADC  ( void )
     ADC12CTL2   &=  ~( ADC12RES | ADC12DF | ADC12PWRMD );
     ADC12CTL2   |=   ADC12RES__12BIT;
 
+    /* ADC_B address 30
+     *  Comparator window disabled
+     *  Single-ended mode enabled
+     *  VR+ = VREF buffered, VR- = AVSS
+     *  A30 Input channel selected
+     *    */
+    ADC12MCTL30 &=  ~( ADC12WINC | ADC12DIF | ADC12VRSEL | ADC12INCH );
+    ADC12MCTL30 |=   ( ADC12VRSEL_1 | ADC12INCH_30 );
+
     /* Internal temperature sensor selected and ADC12_B conversion start address on A30 ( Internal temperature sensor )   */
     ADC12CTL3   |=   ( ADC12TCMAP | ADC12CSTARTADD_30 );
+
+    /* A30 ( internal temperature sensor ) interrupt enabled and clear flag */
+    ADC12IFGR1  &=  ~( ADC12IFG30 );
+    ADC12IER1   |=   ( ADC12IE30 );
+
 }
