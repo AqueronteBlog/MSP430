@@ -20,7 +20,8 @@
  * @details     It configures the clock of the whole system.
  *
  *                  - MCLK = SMCLK = DCO = 8MHz
- *                  - HFXT, VLO and LFXT Clock disabled
+ *                  - ACLK:   VLOCLK ~ 9.4KHz
+ *                  - HFXT and LFXT Clock disabled
  *
  *
  * @param[in]    N/A.
@@ -32,7 +33,8 @@
  *
  * @author      Manuel Caballero
  * @date        17/November/2018
- * @version     17/November/2018      The ORIGIN
+ * @version     27/November/2018      ACLK:   VLOCLK ~ 9.4KHz
+ *              17/November/2018      The ORIGIN
  * @pre         N/A
  * @warning     N/A
  */
@@ -45,16 +47,17 @@ void conf_CLK  ( void )
     CSCTL1 &=  ~( DCORSEL | DCOFSEL );
     CSCTL1 |=   DCOFSEL_6;
 
-    /* MCLK = SMCLK = DCO    */
-    CSCTL2  &=  ~( SELS | SELM );
-    CSCTL2  |=   ( SELS_3 | SELM_3 );
+    /* MCLK = SMCLK = DCO, ACLK = VLOCLK    */
+    CSCTL2  &=  ~( SELS | SELM | SELA );
+    CSCTL2  |=   ( SELS_3 | SELM_3 | SELA__VLOCLK );
 
-    /* SMCLK/1, MCLK/1   */
-    CSCTL3  &=  ~( DIVS | DIVM );
+    /* SMCLK/1, MCLK/1, ACLK = ACLK/1   */
+    CSCTL3  &=  ~( DIVS | DIVM | DIVA );
+    CSCTL3  |=   DIVA_0;
 
-    /* SMCLK Clock enabled and HFXT, VLO and LFXT Clock disabled     */
-    CSCTL4  &=  ~( SMCLKOFF );
-    CSCTL4  |=   ( HFXTOFF | VLOOFF | LFXTOFF );
+    /* SMCLK and VLO Clock enabled and HFXT, VLO and LFXT Clock disabled     */
+    CSCTL4  &=  ~( SMCLKOFF | VLOOFF );
+    CSCTL4  |=   ( HFXTOFF | LFXTOFF | VLOOFF_0 );
 
     /* Block the clock registers     */
     CSCTL0_H =   0x01;
@@ -291,4 +294,6 @@ void conf_ADC  ( void )
     ADC12IFGR1  &=  ~( ADC12IFG30 );
     ADC12IER1   |=   ( ADC12IE30 );
 
+    /* ADC12_B enabled   */
+    ADC12CTL0   |=   ( ADC12ON );
 }
