@@ -27,7 +27,8 @@ extern "C" {
 
 /**@brief Subroutine prototypes.
  */
-__interrupt void ADC12_B_ISR ( void );
+__interrupt void TIMER0_A0_ISR  ( void );
+__interrupt void ADC12_B_ISR    ( void );
 
 
 
