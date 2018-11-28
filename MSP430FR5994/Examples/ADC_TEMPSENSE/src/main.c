@@ -56,6 +56,7 @@ int main(void)
     conf_GPIO   ();
     conf_UART   ();
     conf_ADC    ();
+    conf_TimerA ();
 
 
     /* All interrupts are enabled    */
@@ -64,7 +65,7 @@ int main(void)
 
     while ( 1 )
     {
-        LPM1;
+        LPM3;
 
         if ( myState == STATE_ACTION )
         {
