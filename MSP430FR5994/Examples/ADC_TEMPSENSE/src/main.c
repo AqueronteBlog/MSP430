@@ -65,7 +65,7 @@ int main(void)
 
     while ( 1 )
     {
-        LPM3;
+        LPM1;
 
         if ( myState == STATE_ACTION )
         {
