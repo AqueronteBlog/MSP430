@@ -69,6 +69,7 @@ __interrupt void TIMER0_A1_ISR ( void )
         /*  Vector E:     Interrupt Source: Timer overflow; Interrupt Flag: TAxCTL TAIFG; Interrupt Priority: Lowest     */
             /*[todo] Start ADC12_B conversion     */
             P1OUT   ^=   LED1;              // Change LED1 state
+            ADC12CTL0   |=   ( ADC12ENC | ADC12SC );
             TA0CTL  &=  ~( TAIFG );         // Reset flag
             break;
 
