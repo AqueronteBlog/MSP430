@@ -4,6 +4,7 @@
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROGRAM.D:\Workspace\MSP430\MSP430FR5994\Examples\ADC_TEMPSENSE\targetConfigs\MSP430FR5994.ccxml.TI MSP430 USB1/MSP430" value="${build_artifact:ADC_TEMPSENSE}"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROJECT.D:\Workspace\MSP430\MSP430FR5994\Examples\ADC_TEMPSENSE\targetConfigs\MSP430FR5994.ccxml.TI MSP430 USB1/MSP430" value="ADC_TEMPSENSE"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_TARGET_CONFIG" value="${target_config_active_default:ADC_TEMPSENSE}"/>
+<stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.D:\Workspace\MSP430\MSP430FR5994\Examples\ADC_TEMPSENSE\targetConfigs\MSP430FR5994.ccxml.TI MSP430 USB1/MSP430" value="D:/Workspace\MSP430\MSP430FR5994\Examples\ADC_TEMPSENSE\Debug\ADC_TEMPSENSE.out"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/ADC_TEMPSENSE"/>
 </listAttribute>
