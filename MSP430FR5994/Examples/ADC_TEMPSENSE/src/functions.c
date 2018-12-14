@@ -295,7 +295,7 @@ void conf_ADC  ( void )
     ADC12IER1   |=   ( ADC12IE30 );
 
     /* ADC12_B enabled   */
-    ADC12CTL0   |=   ( ADC12ON );
+    ADC12CTL0   |=   ( ADC12ON | ADC12ENC );
 }
 
 
