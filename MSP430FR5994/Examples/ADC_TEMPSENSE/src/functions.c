@@ -263,25 +263,28 @@ void conf_ADC  ( void )
     ADC12CTL0   &=  ~( ADC12ON | ADC12ENC );
 
     /* ADC12_B:
+     *  16 ADC12CLK cycles
      *  ADC12_B predivider by 1
      *  SAMPCON signal is sourced from the sample-input signal
      *  The sample-input signal is not inverted
      *  ADC12_B clock divider into 1
-     *  ADC12_B clock source:  ADC12OSC ( MODOSC )
+     *  ADC12_B clock source:  MCLK //ADC12OSC ( MODOSC )
      *  Single-channel, single-conversion
      *  Binary unsigned
-     *  ADC12_B resolution: 12 bit ( 14 clock cycle conversion time )
+     *  ADC12_B resolution: 12 bit ( 14 clock cycle conversion time at least )
      *  Regular power mode where sample rate is not restricted
      *
      */
+    ADC12CTL0   |=   ADC12SHT0_2;
     ADC12CTL1   &=  ~( ADC12PDIV | ADC12SHP | ADC12ISSH | ADC12DIV | ADC12SSEL | ADC12CONSEQ );
+    ADC12CTL1   |=   ADC12SSEL_3;
     ADC12CTL2   &=  ~( ADC12RES | ADC12DF | ADC12PWRMD );
     ADC12CTL2   |=   ADC12RES__12BIT;
 
     /* ADC_B address 30
      *  Comparator window disabled
      *  Single-ended mode enabled
-     *  VR+ = VREF buffered, VR- = AVSS
+     *  VR+ = VREF+ buffered, VR- = AVSS
      *  A30 Input channel selected
      *    */
     ADC12MCTL30 &=  ~( ADC12WINC | ADC12DIF | ADC12VRSEL | ADC12INCH );
@@ -293,6 +296,9 @@ void conf_ADC  ( void )
     /* A30 ( internal temperature sensor ) interrupt enabled and clear flag */
     ADC12IFGR1  &=  ~( ADC12IFG30 );
     ADC12IER1   |=   ( ADC12IE30 );
+
+    /* ADC12_B local reference buffer ready interrupt enable     */
+    ADC12IER2   |=   ( ADC12RDYIE );
 
     /* ADC12_B enabled   */
     ADC12CTL0   |=   ( ADC12ON | ADC12ENC );
