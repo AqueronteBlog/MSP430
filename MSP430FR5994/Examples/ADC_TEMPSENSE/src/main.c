@@ -65,7 +65,7 @@ int main(void)
 
     while ( 1 )
     {
-        LPM1;
+        /*LPM1;
 
         if ( myState == STATE_ACTION )
         {
@@ -86,14 +86,14 @@ int main(void)
                     break;
             }
 
-            /* Clean and Enable interrupts: Tx only  */
+             Clean and Enable interrupts: Tx only
             UCA0IFG &=  ~( UCTXIFG );
             UCA0IE  &=  ~( UCRXIE );
             UCA0IE  |=   ( UCTXIE );
 
-            /* Start transmitting data through the UART   */
+             Start transmitting data through the UART
             myPtr        =  &myMessage[0];
             UCA0TXBUF    =  *myPtr;
-        }
+        }*/
     }
 }
