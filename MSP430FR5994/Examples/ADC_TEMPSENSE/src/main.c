@@ -35,9 +35,10 @@
 
 /**@brief Variables.
  */
-volatile myCommands_t   myRX_cmd   =   CMD_WRONG;       /*!<   Command received from the UART                         */
+volatile myCommands_t    myRX_cmd  =   CMD_WRONG;       /*!<   Command received from the UART                         */
 volatile uint8_t        *myPtr;                         /*!<   Pointer to point out myMessage                         */
 volatile system_states_t myState   =   STATE_LOW_POWER; /*!<   State of the system                                    */
+volatile uint16_t        myRawTemp =   0U;              /*!<   Variable to store the raw temperature                  */
 
 
 /**@brief Function Prototypes.
