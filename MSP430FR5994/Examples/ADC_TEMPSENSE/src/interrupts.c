@@ -101,7 +101,7 @@ __interrupt void TIMER0_A1_ISR ( void )
 #pragma vector = ADC12_B_VECTOR
 __interrupt void ADC12_B_ISR ( void )
 {
-    switch ( __even_in_range ( ADC12IV, ADC12IV_76 ) )
+    switch ( __even_in_range ( ADC12IV, ADC12IV__ADC12RDYIFG ) )
     {
         case ADC12IV_0:
         /* Interrupt Source: No interrupt pending, Interrupt Flag: None  */
@@ -249,7 +249,8 @@ __interrupt void ADC12_B_ISR ( void )
 
         case ADC12IV_72:
         /*  Interrupt Source: ADC12MEM30 interrupt flag, Interrupt Flag: ADC12IFG30  */
-
+            myRawTemp   =    ADC12MEM30;
+            ADC12CTL0   &=  ~ADC12ENC;              // ADC12 OFF
             ADC12IFGR1  &=  ~( ADC12IFG30 );        // Clear the flag
             break;
 

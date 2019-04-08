@@ -42,6 +42,7 @@ __interrupt void ADC12_B_ISR    ( void );
 extern volatile myCommands_t    myRX_cmd;
 extern volatile uint8_t         *myPtr;
 extern volatile system_states_t myState;
+extern volatile uint16_t        myRawTemp;
 
 
 #ifdef __cplusplus
