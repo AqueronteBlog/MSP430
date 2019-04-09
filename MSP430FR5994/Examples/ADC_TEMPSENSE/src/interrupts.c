@@ -250,7 +250,7 @@ __interrupt void ADC12_B_ISR ( void )
         case ADC12IV_72:
         /*  Interrupt Source: ADC12MEM30 interrupt flag, Interrupt Flag: ADC12IFG30  */
             myRawTemp   =    ADC12MEM30;
-            ADC12CTL0   &=  ~ADC12ENC;              // ADC12 OFF
+            //ADC12CTL0   &=  ~ADC12ENC;              // ADC12 OFF
             ADC12IFGR1  &=  ~( ADC12IFG30 );        // Clear the flag
             break;
 
