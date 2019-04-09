@@ -259,63 +259,49 @@ void conf_UART  ( void )
  */
 void conf_ADC  ( void )
 {
-//    /* ADC12_B Off and disabled   */
-//    ADC12CTL0   &=  ~( ADC12ON | ADC12ENC );
-//
-//    /* ADC12_B:
-//     *  32 ADC12CLK cycles
-//     *  ADC12_B predivider by 1
-//     *  SAMPCON signal is sourced from the sample-input signal
-//     *  The sample-input signal is not inverted
-//     *  ADC12_B clock divider into 8
-//     *  ADC12_B clock source:  ADC12OSC ( MODOSC )
-//     *  Single-channel, single-conversion
-//     *  Binary unsigned
-//     *  ADC12_B resolution: 12 bit ( 14 clock cycle conversion time at least )
-//     *  Regular power mode where sample rate is not restricted
-//     *
-//     */
-//    ADC12CTL0   |=   ADC12SHT0_3;
-//    ADC12CTL1   &=  ~( ADC12PDIV | ADC12SHP | ADC12ISSH | ADC12DIV | ADC12SSEL | ADC12CONSEQ );
-//    ADC12CTL1   |=   ( ADC12SSEL_0 | ADC12DIV_7 );
-//    ADC12CTL2   &=  ~( ADC12RES | ADC12DF | ADC12PWRMD );
-//    ADC12CTL2   |=   ADC12RES__12BIT;
-//
-//    /* ADC_B address 30
-//     *  Comparator window disabled
-//     *  Single-ended mode enabled
-//     *  VR+ = AVCC buffered, VR- = AVSS
-//     *  A30 Input channel selected
-//     *    */
-//    ADC12MCTL30 &=  ~( ADC12WINC | ADC12DIF | ADC12VRSEL | ADC12INCH );
-//    ADC12MCTL30 |=   ( ADC12VRSEL_0 | ADC12INCH_30 );
-//
-//    /* Internal temperature sensor selected and ADC12_B conversion start address on A30 ( Internal temperature sensor )   */
-//    ADC12CTL3   |=   ( ADC12TCMAP | ADC12CSTARTADD_30 );
-//
-//    /* A30 ( internal temperature sensor ) interrupt enabled and clear flag */
-//    ADC12IFGR1  &=  ~( ADC12IFG30 );
-//    ADC12IER1   |=   ( ADC12IE30 );
-//
-//    /* ADC12_B local reference buffer ready interrupt enable     */
-//    ADC12IER2   |=   ( ADC12RDYIE );
-//
-//    /* ADC12_B enabled   */
-//    ADC12CTL0   |=   ( ADC12ON | ADC12ENC );
+    /* ADC12_B Off and disabled   */
+    ADC12CTL0   &=  ~( ADC12ON | ADC12ENC );
 
-    uint16_t degC = 0;
+    /* ADC12_B:
+     *  32 ADC12CLK cycles
+     *  ADC12_B predivider by 1
+     *  SAMPCON signal is sourced from the sample-input signal
+     *  The sample-input signal is not inverted
+     *  ADC12_B clock divider into 8
+     *  ADC12_B clock source:  ADC12OSC ( MODOSC )
+     *  SAMPCON signal is sourced from the sampling timer
+     *  Single-channel, single-conversion
+     *  Binary unsigned
+     *  ADC12_B resolution: 12 bit ( 14 clock cycle conversion time at least )
+     *  Regular power mode where sample rate is not restricted
+     *
+     */
+    ADC12CTL0   &=  ~ADC12SHT0;
+    ADC12CTL0   |=   ADC12SHT0_3;
+    ADC12CTL1   &=  ~( ADC12PDIV | ADC12SHP | ADC12ISSH | ADC12DIV | ADC12SSEL | ADC12CONSEQ );
+    ADC12CTL1   |=   ( ADC12SSEL_0 | ADC12SHP_1 | ADC12DIV_7 );
+    ADC12CTL2   &=  ~( ADC12RES | ADC12DF | ADC12PWRMD );
+    ADC12CTL2   |=   ADC12RES__12BIT;
 
-      ADC12CTL0     &=  ~ADC12ENC;
-      ADC12CTL1      =   ADC12DIV_3 | ADC12SHP | ADC12SSEL_0 | ADC12CONSEQ_2;       // f_ADC10 ~ 4.5/3 MHz, Repeat-single-channel
-      ADC12CTL2     &=  ~ADC12RES;                                                  // ADC10 8-bit
-      ADC12MCTL30 &=  ~( ADC12WINC | ADC12DIF | ADC12VRSEL | ADC12INCH );
-      ADC12MCTL30 |=   ( ADC12VRSEL_0 | ADC12INCH_30 );
-      ADC12CTL3   |=   ( ADC12TCMAP | ADC12CSTARTADD_30 );
-      ADC12IFGR1  &=  ~( ADC12IFG30 );
-      ADC12IER1   |=   ( ADC12IE30 );
-      ADC12CTL0      =   ADC12SHT0_3 | ADC12MSC | ADC12ON;                           // 4/(4.5/3 MHz), ADC10 enabled
+    /* ADC_B address 30
+     *  Comparator window disabled
+     *  Single-ended mode enabled
+     *  VR+ = AVCC buffered, VR- = AVSS
+     *  A30 Input channel selected
+     *
+     */
+    ADC12MCTL30 &=  ~( ADC12WINC | ADC12DIF | ADC12VRSEL | ADC12INCH );
+    ADC12MCTL30 |=   ( ADC12VRSEL_0 | ADC12INCH_30 );
 
-      for(degC = 30; degC > 0; degC-- );
+    /* Internal temperature sensor selected and ADC12_B conversion start address on A30 ( Internal temperature sensor )   */
+    ADC12CTL3   |=   ( ADC12TCMAP | ADC12CSTARTADD_30 );
+
+    /* A30 ( internal temperature sensor ) interrupt enabled and clear flag */
+    ADC12IFGR1  &=  ~( ADC12IFG30 );
+    ADC12IER1   |=   ( ADC12IE30 );
+
+    /* ADC12_B enabled   */
+    ADC12CTL0   |=   ( ADC12ON | ADC12ENC );
 }
 
 
