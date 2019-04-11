@@ -67,10 +67,10 @@ __interrupt void TIMER0_A1_ISR ( void )
 
         case    0x0E:
         /*  Vector E:     Interrupt Source: Timer overflow; Interrupt Flag: TAxCTL TAIFG; Interrupt Priority: Lowest     */
-            /*[todo] Start ADC12_B conversion     */
-            P1OUT   ^=   LED1;              // Change LED1 state
+            /* Start ADC12_B conversion     */
+            P1OUT       |=   LED1;              // LED1 on
             ADC12CTL0   |=   ( ADC12ENC | ADC12SC );
-            TA0CTL  &=  ~( TAIFG );         // Reset flag
+            TA0CTL      &=  ~( TAIFG );         // Reset flag
             break;
 
         default:
@@ -250,7 +250,11 @@ __interrupt void ADC12_B_ISR ( void )
         case ADC12IV_72:
         /*  Interrupt Source: ADC12MEM30 interrupt flag, Interrupt Flag: ADC12IFG30  */
             myRawTemp   =    ADC12MEM30;
-            //ADC12CTL0   &=  ~ADC12ENC;              // ADC12 OFF
+            ADC12CTL0   &=  ~ADC12ENC;              // ADC12 OFF
+
+            myState      =   STATE_ACTION;
+            __bic_SR_register_on_exit( LPM3_bits ); // Exit active CPU
+
             ADC12IFGR1  &=  ~( ADC12IFG30 );        // Clear the flag
             break;
 
@@ -260,6 +264,71 @@ __interrupt void ADC12_B_ISR ( void )
 
         case ADC12IV_76:
         /*  Interrupt Source: ADC12RDYIFG interrupt flag, Interrupt Flag: ADC12RDYIFG  */
+            break;
+
+        default:
+            break;
+    }
+}
+
+
+
+/**
+ * @brief       UART0_ISR interrupt service routine
+ * @details     Subroutine for UART0.
+ *
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        11/April/2019
+ * @version     11/April/2019      The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+#pragma vector = EUSCI_A0_VECTOR
+__interrupt void UART0_ISR ( void )
+{
+    switch ( __even_in_range ( UCA0IV, 18 ) )
+    {
+        case UCIV_0:
+        /* Interrupt Source:  No interrupt pending  */
+            break;
+
+        case UCIV_2:
+        /* Interrupt Source: Receive buffer full; Interrupt Flag: UCRXIFG ( Interrupt Priority: Highest )  */
+            break;
+
+        case UCIV_4:
+        /* Interrupt Source: Transmit buffer empty; Interrupt Flag: UCTXIFG  */
+            /* Stop transmitting data when that character is found */
+            if ( *myPtr  == '\n' )
+            {
+                /* All data was transmitted already, restore UART Rx interrupt again     */
+                UCA0IE  &=  ~( UCTXIE );
+                UCA0IE  |=   ( UCRXIE );
+            }
+            else
+            {
+                /* Keep transmitting data through the UART   */
+                UCA0TXBUF    =   *++myPtr;
+            }
+
+            myState  =   STATE_LOW_POWER;
+            UCA0IFG &=  ~UCTXIFG;           // Reset flag
+            break;
+
+        case UCIV_6:
+        /* Interrupt Source: Start bit received; Interrupt Flag: UCSTTIFG  */
+            break;
+
+        case UCIV_8:
+        /* Interrupt Source: Transmit complete; Interrupt Flag: UCTXCPTIFG ( Interrupt Priority: Lowest )  */
             break;
 
         default:
