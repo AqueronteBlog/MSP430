@@ -30,15 +30,16 @@
 
 /**@brief Constants.
  */
-#define TX_BUFF_SIZE  32                                /*!<   UART buffer size                                       */
-
+#define TX_BUFF_SIZE  32                                /*!< UART buffer size                                   */
+#define CALADC12_12V_30C  *( (unsigned int *)0x1A1A )   /*!< Temperature Sensor Calibration-30 C                */
+#define CALADC12_12V_85C  *( (unsigned int *)0x1A1C )   /*!< Temperature Sensor Calibration-85 C                */
 
 /**@brief Variables.
  */
-volatile myCommands_t    myRX_cmd  =   CMD_WRONG;       /*!<   Command received from the UART                         */
-volatile uint8_t        *myPtr;                         /*!<   Pointer to point out myMessage                         */
-volatile system_states_t myState   =   STATE_LOW_POWER; /*!<   State of the system                                    */
-volatile uint16_t        myRawTemp =   0U;              /*!<   Variable to store the raw temperature                  */
+volatile myCommands_t    myRX_cmd  =   CMD_WRONG;       /*!< Command received from the UART                     */
+volatile uint8_t        *myPtr;                         /*!< Pointer to point out myMessage                     */
+volatile system_states_t myState   =   STATE_LOW_POWER; /*!< State of the system                                */
+volatile uint16_t        myRawTemp =   0U;              /*!< Variable to store the raw temperature              */
 
 
 /**@brief Function Prototypes.
@@ -50,12 +51,14 @@ volatile uint16_t        myRawTemp =   0U;              /*!<   Variable to store
  */
 int main(void)
 {
-    uint8_t  myMessage[ TX_BUFF_SIZE ];      /*!<   Message to be transmitted through the UART             */
+    float    myTemperatureC = 0.0f;              /*!<   Temperature in Celsius degrees                         */
+    uint8_t  myMessage[ TX_BUFF_SIZE ] = { 0 }; /*!<   Message to be transmitted through the UART             */
 
     conf_WDT    ();
     conf_CLK    ();
     conf_GPIO   ();
     conf_UART   ();
+    conf_REF_A  ();
     conf_ADC    ();
     conf_TimerA ();
 
@@ -66,35 +69,23 @@ int main(void)
 
     while ( 1 )
     {
-        /*LPM1;
+        LPM3;
 
         if ( myState == STATE_ACTION )
         {
-            switch ( myRX_cmd )
-            {
-                case CMD_LED1:
-                    P1OUT   ^=   LED1;                          // Change state of LED1
-                    sprintf ( (char*)myMessage, "LED1\r\n" );
-                    break;
+            myTemperatureC   = (float)( ( (float)myRawTemp - CALADC12_12V_30C ) * ( 85.0f - 30.0f ) ) / ( CALADC12_12V_85C - CALADC12_12V_30C ) + 30.0f;
 
-                case CMD_LED2:
-                    P1OUT   ^=   LED2;                          // Change state of LED2
-                    sprintf ( (char*)myMessage, "LED2\r\n" );
-                    break;
+            sprintf ( (char*)myMessage, "Temp = %d mC\r\n", (int)( 100*myTemperatureC ) );
 
-                case CMD_WRONG:
-                    sprintf ( (char*)myMessage, "Wrong command!\r\n" );
-                    break;
-            }
 
-             Clean and Enable interrupts: Tx only
+            /*  Clean and Enable interrupts: Tx only     */
             UCA0IFG &=  ~( UCTXIFG );
             UCA0IE  &=  ~( UCRXIE );
             UCA0IE  |=   ( UCTXIE );
 
-             Start transmitting data through the UART
+            /*  Start transmitting data through the UART     */
             myPtr        =  &myMessage[0];
             UCA0TXBUF    =  *myPtr;
-        }*/
+        }
     }
 }
