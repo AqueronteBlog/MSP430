@@ -286,12 +286,12 @@ void conf_ADC  ( void )
     /* ADC_B address 30
      *  Comparator window disabled
      *  Single-ended mode enabled
-     *  VR+ = AVCC buffered, VR- = AVSS
+     *  VR+ = VREF buffered, VR- = AVSS
      *  A30 Input channel selected
      *
      */
     ADC12MCTL30 &=  ~( ADC12WINC | ADC12DIF | ADC12VRSEL | ADC12INCH );
-    ADC12MCTL30 |=   ( ADC12VRSEL_0 | ADC12INCH_30 );
+    ADC12MCTL30 |=   ( ADC12VRSEL_1 | ADC12INCH_30 );
 
     /* Internal temperature sensor selected and ADC12_B conversion start address on A30 ( Internal temperature sensor )   */
     ADC12CTL3   |=   ( ADC12TCMAP | ADC12CSTARTADD_30 );
@@ -302,6 +302,48 @@ void conf_ADC  ( void )
 
     /* ADC12_B enabled   */
     ADC12CTL0   |=   ( ADC12ON | ADC12ENC );
+}
+
+
+
+/**
+ * @brief       void conf_REF_A  ( void )
+ * @details     It configures the REF_A module ( internal reference voltage ).
+ *
+ *                  · Internal temperature sensor enabled
+ *                  · Voltage reference: 1.2V
+ *
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        11/April/2019
+ * @version     11/April/2019   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void conf_REF_A  ( void )
+{
+    /* Wait until Reference generator is NOT busy   */
+    while ( ( REFCTL0 & REFGENBUSY ) == REFGENBUSY_1 );  // [TODO] Warning! Too dangerous, if something goes wrong, the uC gets stuck!
+                                                         // [WORKAROUND] Add a counter.
+    /* REF_A
+     *  Reference voltage 1.2V
+     *  Temperature sensor enabled
+     *  Enables reference
+     *
+    */
+    REFCTL0 &=  ~( REFVSEL | REFTCOFF );
+    REFCTL0 |=   ( REFVSEL_0 | REFON_1 );
+
+    /* Wait until Reference voltage is ready to be used   */
+    while ( ( REFCTL0 & REFGENRDY ) == REFGENRDY_0 );    // [TODO] Warning! Too dangerous, if something goes wrong, the uC gets stuck!
+                                                         // [WORKAROUND] Add a counter.
 }
 
 
