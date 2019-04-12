@@ -252,7 +252,7 @@ __interrupt void ADC12_B_ISR ( void )
             myRawTemp   =    ADC12MEM30;
             ADC12CTL0   &=  ~ADC12ENC;              // ADC12 OFF
 
-            myState      =   STATE_ACTION;
+            myState      =   PACK_TEMPERATURE;      // Update the state
             __bic_SR_register_on_exit( LPM3_bits ); // Exit active CPU
 
             ADC12IFGR1  &=  ~( ADC12IFG30 );        // Clear the flag
@@ -312,6 +312,8 @@ __interrupt void UART0_ISR ( void )
                 /* All data was transmitted already, restore UART Rx interrupt again     */
                 UCA0IE  &=  ~( UCTXIE );
                 UCA0IE  |=   ( UCRXIE );
+
+                P1OUT   &=  ~LED1;              // LED1 on
             }
             else
             {
