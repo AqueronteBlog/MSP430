@@ -229,19 +229,15 @@ void conf_UART  ( void )
 
 /**
  * @brief       void conf_ADC  ( void )
- * @details     It configures the ADC.
+ * @details     It configures the ADC12_B peripheral to work with the internal temperature
+ *              sensor.
  *
- *                  [todo]· BRCLK source clock: SMCLK = 8MHz.
- *                  · BuadRate = 115200:
- *
- *                      N = f_BRCLK/BaudRate = 8MHz/115200 ~ 69.444 = {INT} = 69
- *
- *                      N >= 16 -->  Oversampling ON (UCOS16 = 1)
- *
- *              Therefore:
- *
- *                  UCBRx = INT(N/16) = INT(69/16) = 4
- *                  UCBRFx = ROUND[((N/16) - INT(N/16))·16] = ROUND[((8MHz/115200)/16 - INT((8MHz/115200)/16))·16] ~ 5.44 = 5
+ *              · ADC12_B clock divider into 8
+ *              · ADC12_B clock source:  ADC12OSC ( MODOSC ): 4.8MHz/8 = 600kHz
+ *              · ADC12_B resolution: 12 bit
+ *              · One-shot channel
+ *              · VR+ = VREF ( 1.2V ) buffered, VR- = AVSS
+ *              · SAMPCON signal is sourced from the sampling timer
  *
  *
  * @param[in]    N/A.
@@ -253,8 +249,14 @@ void conf_UART  ( void )
  *
  * @author      Manuel Caballero
  * @date        19/November/2018
- * @version     19/November/2018   The ORIGIN
- * @pre         N/A
+ * @version     12/April/2019      Final version and comments were improved.
+ *              19/November/2018   The ORIGIN
+ * @pre         Voltajes de referencia:
+ *                  · Vref+ = VDD ~ 3.6 V
+ *                  · Vref- = Vss.
+ * @pre         Sample time for internal temperature sensor must be greater than 30us:
+ *                  · ADC12 clock: ADC10OSC ( MODOSC ): 4.8MHz/8 = 600kHz
+ *                  · Sample time: 32CLK: 32/(~4.8MHz/8) ~ 53.33us -> OK!.
  * @warning     N/A
  */
 void conf_ADC  ( void )
