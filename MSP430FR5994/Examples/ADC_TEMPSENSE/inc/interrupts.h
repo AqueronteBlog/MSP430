@@ -29,7 +29,7 @@ extern "C" {
  */
 __interrupt void TIMER0_A0_ISR  ( void );
 __interrupt void ADC12_B_ISR    ( void );
-
+__interrupt void UART0_ISR      ( void );
 
 
 /**@brief Constants.
@@ -39,9 +39,9 @@ __interrupt void ADC12_B_ISR    ( void );
 
 /**@brief Variables.
  */
-extern volatile myCommands_t    myRX_cmd;
 extern volatile uint8_t         *myPtr;
 extern volatile system_states_t myState;
+extern volatile uint16_t        myRawTemp;
 
 
 #ifdef __cplusplus

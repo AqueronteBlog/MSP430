@@ -229,19 +229,15 @@ void conf_UART  ( void )
 
 /**
  * @brief       void conf_ADC  ( void )
- * @details     It configures the ADC.
+ * @details     It configures the ADC12_B peripheral to work with the internal temperature
+ *              sensor.
  *
- *                  [todo]· BRCLK source clock: SMCLK = 8MHz.
- *                  · BuadRate = 115200:
- *
- *                      N = f_BRCLK/BaudRate = 8MHz/115200 ~ 69.444 = {INT} = 69
- *
- *                      N >= 16 -->  Oversampling ON (UCOS16 = 1)
- *
- *              Therefore:
- *
- *                  UCBRx = INT(N/16) = INT(69/16) = 4
- *                  UCBRFx = ROUND[((N/16) - INT(N/16))·16] = ROUND[((8MHz/115200)/16 - INT((8MHz/115200)/16))·16] ~ 5.44 = 5
+ *              · ADC12_B clock divider into 8
+ *              · ADC12_B clock source:  ADC12OSC ( MODOSC ): 4.8MHz/8 = 600kHz
+ *              · ADC12_B resolution: 12 bit
+ *              · One-shot channel
+ *              · VR+ = VREF ( 1.2V ) buffered, VR- = AVSS
+ *              · SAMPCON signal is sourced from the sampling timer
  *
  *
  * @param[in]    N/A.
@@ -253,8 +249,14 @@ void conf_UART  ( void )
  *
  * @author      Manuel Caballero
  * @date        19/November/2018
- * @version     19/November/2018   The ORIGIN
- * @pre         N/A
+ * @version     12/April/2019      Final version and comments were improved.
+ *              19/November/2018   The ORIGIN
+ * @pre         Voltajes de referencia:
+ *                  · Vref+ = VDD ~ 3.6 V
+ *                  · Vref- = Vss.
+ * @pre         Sample time for internal temperature sensor must be greater than 30us:
+ *                  · ADC12 clock: ADC10OSC ( MODOSC ): 4.8MHz/8 = 600kHz
+ *                  · Sample time: 32CLK: 32/(~4.8MHz/8) ~ 53.33us -> OK!.
  * @warning     N/A
  */
 void conf_ADC  ( void )
@@ -263,18 +265,23 @@ void conf_ADC  ( void )
     ADC12CTL0   &=  ~( ADC12ON | ADC12ENC );
 
     /* ADC12_B:
+     *  32 ADC12CLK cycles
      *  ADC12_B predivider by 1
      *  SAMPCON signal is sourced from the sample-input signal
      *  The sample-input signal is not inverted
-     *  ADC12_B clock divider into 1
+     *  ADC12_B clock divider into 8
      *  ADC12_B clock source:  ADC12OSC ( MODOSC )
+     *  SAMPCON signal is sourced from the sampling timer
      *  Single-channel, single-conversion
      *  Binary unsigned
-     *  ADC12_B resolution: 12 bit ( 14 clock cycle conversion time )
+     *  ADC12_B resolution: 12 bit ( 14 clock cycle conversion time at least )
      *  Regular power mode where sample rate is not restricted
      *
      */
+    ADC12CTL0   &=  ~ADC12SHT0;
+    ADC12CTL0   |=   ADC12SHT0_3;
     ADC12CTL1   &=  ~( ADC12PDIV | ADC12SHP | ADC12ISSH | ADC12DIV | ADC12SSEL | ADC12CONSEQ );
+    ADC12CTL1   |=   ( ADC12SSEL_0 | ADC12SHP_1 | ADC12DIV_7 );
     ADC12CTL2   &=  ~( ADC12RES | ADC12DF | ADC12PWRMD );
     ADC12CTL2   |=   ADC12RES__12BIT;
 
@@ -283,7 +290,8 @@ void conf_ADC  ( void )
      *  Single-ended mode enabled
      *  VR+ = VREF buffered, VR- = AVSS
      *  A30 Input channel selected
-     *    */
+     *
+     */
     ADC12MCTL30 &=  ~( ADC12WINC | ADC12DIF | ADC12VRSEL | ADC12INCH );
     ADC12MCTL30 |=   ( ADC12VRSEL_1 | ADC12INCH_30 );
 
@@ -296,6 +304,48 @@ void conf_ADC  ( void )
 
     /* ADC12_B enabled   */
     ADC12CTL0   |=   ( ADC12ON | ADC12ENC );
+}
+
+
+
+/**
+ * @brief       void conf_REF_A  ( void )
+ * @details     It configures the REF_A module ( internal reference voltage ).
+ *
+ *                  · Internal temperature sensor enabled
+ *                  · Voltage reference: 1.2V
+ *
+ *
+ * @param[in]    N/A.
+ *
+ * @param[out]   N/A.
+ *
+ *
+ * @return      N/A
+ *
+ * @author      Manuel Caballero
+ * @date        11/April/2019
+ * @version     11/April/2019   The ORIGIN
+ * @pre         N/A
+ * @warning     N/A
+ */
+void conf_REF_A  ( void )
+{
+    /* Wait until Reference generator is NOT busy   */
+    while ( ( REFCTL0 & REFGENBUSY ) == REFGENBUSY_1 );  // [TODO] Warning! Too dangerous, if something goes wrong, the uC gets stuck!
+                                                         // [WORKAROUND] Add a counter.
+    /* REF_A
+     *  Reference voltage 1.2V
+     *  Temperature sensor enabled
+     *  Enables reference
+     *
+    */
+    REFCTL0 &=  ~( REFVSEL | REFTCOFF );
+    REFCTL0 |=   ( REFVSEL_0 | REFON_1 );
+
+    /* Wait until Reference voltage is ready to be used   */
+    while ( ( REFCTL0 & REFGENRDY ) == REFGENRDY_0 );    // [TODO] Warning! Too dangerous, if something goes wrong, the uC gets stuck!
+                                                         // [WORKAROUND] Add a counter.
 }
 
 
