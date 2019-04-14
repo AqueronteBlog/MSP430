@@ -229,12 +229,12 @@ void conf_UART  ( void )
 /**
  * @brief       void conf_ADC  ( void )
  * @details     It configures the ADC12_B peripheral to work with the internal temperature
- *              sensor.
+ *              sensor triggered by the timer.
  *
  *              · ADC12_B clock divider into 8
- *              · ADC12_B clock source:  ADC12OSC ( MODOSC ): 4.8MHz/8 = 600kHz
+ *              · ADC12_B sample-and-hold source select: External source Timer TB0 CCR0
  *              · ADC12_B resolution: 12 bit
- *              · One-shot channel
+ *              · Repeat-single-channel
  *              · VR+ = VREF ( 1.2V ) buffered, VR- = AVSS
  *              · SAMPCON signal is sourced from the sampling timer
  *
@@ -249,8 +249,8 @@ void conf_UART  ( void )
  * @author      Manuel Caballero
  * @date        13/April/2019
  * @version     13/April/2019   The ORIGIN
- * @pre         Voltajes de referencia:
- *                  · Vref+ = VDD ~ 3.6 V
+ * @pre         Reference voltage:
+ *                  · Vref+ = 1.2V
  *                  · Vref- = Vss.
  * @pre         Sample time for internal temperature sensor must be greater than 30us:
  *                  · ADC12 clock: ADC10OSC ( MODOSC ): 4.8MHz/8 = 600kHz
@@ -265,12 +265,12 @@ void conf_ADC  ( void )
     /* ADC12_B:
      *  32 ADC12CLK cycles
      *  ADC12_B predivider by 1
-     *  SAMPCON signal is sourced from the sample-input signal
+     *  ADC12_B sample-and-hold source select: External source Timer TB0 CCR0
      *  The sample-input signal is not inverted
      *  ADC12_B clock divider into 8
-     *  ADC12_B clock source:  ADC12OSC ( MODOSC )
-     *  SAMPCON signal is sourced from the sampling timer
-     *  Single-channel, single-conversion
+     *  ADC12_B clock source: ADC10OSC ( MODOSC ): 4.8MHz/8 = 600kHz
+     *  SAMPCON signal is sourced  from the sampling timer
+     *  Repeat-single-channel
      *  Binary unsigned
      *  ADC12_B resolution: 12 bit ( 14 clock cycle conversion time at least )
      *  Regular power mode where sample rate is not restricted
@@ -278,8 +278,8 @@ void conf_ADC  ( void )
      */
     ADC12CTL0   &=  ~ADC12SHT0;
     ADC12CTL0   |=   ADC12SHT0_3;
-    ADC12CTL1   &=  ~( ADC12PDIV | ADC12SHP | ADC12ISSH | ADC12DIV | ADC12SSEL | ADC12CONSEQ );
-    ADC12CTL1   |=   ( ADC12SSEL_0 | ADC12SHP_1 | ADC12DIV_7 );
+    ADC12CTL1   &=  ~( ADC12PDIV | ADC12SHP | ADC12ISSH | ADC12DIV | ADC12SSEL | ADC12CONSEQ | ADC12SHS );
+    ADC12CTL1   |=   ( ADC12SSEL_0 | ADC12SHP_1 | ADC12DIV_7 | ADC12SHS_2 | ADC12CONSEQ_2 );
     ADC12CTL2   &=  ~( ADC12RES | ADC12DF | ADC12PWRMD );
     ADC12CTL2   |=   ADC12RES__12BIT;
 
@@ -301,7 +301,7 @@ void conf_ADC  ( void )
     ADC12IER1   |=   ( ADC12IE30 );
 
     /* ADC12_B enabled   */
-    ADC12CTL0   |=   ( ADC12ON | ADC12ENC );
+    ADC12CTL0   |=   ( ADC12ON | ADC12ENC | ADC12SC );
 }
 
 
@@ -349,14 +349,14 @@ void conf_REF_A  ( void )
 
 
 /**
- * @brief       void conf_TimerA  ( void )
- * @details     It configures the TimerA.
+ * @brief       void conf_TimerB  ( void )
+ * @details     It configures the TimerB.
  *
- *                  Timer A0:
- *                      - Timer A0: Up mode
- *                      - ACLK clock ( f_TA0/1 = ACLK = VLOCLK ~ 9.4KHz )
- *                      - Interrupt enabled
- *                      - Timer A0 overflow ~ 2s ( Overflow: 18800/9.4kHz = 2s )
+ *                  Timer B0:
+ *                      - Timer B0: Up mode
+ *                      - ACLK clock ( f_TB0/1 = ACLK = VLOCLK ~ 9.4KHz )
+ *                      - Interrupt disabled
+ *                      - Timer B0 overflow ~ 1s ( Overflow: 9400/9.4kHz = 1s )
  *
  *
  * @param[in]    N/A.
@@ -372,34 +372,34 @@ void conf_REF_A  ( void )
  * @pre         N/A
  * @warning     N/A
  */
-void conf_TimerA  ( void )
+void conf_TimerB  ( void )
 {
-    /* Timer TA0:
-     *  - Reset TimerA clock
+    /* Timer TB0:
+     *  - Reset TimerB0 clock
      *  - Reset input divider
-     *  - Stop TimerA0
-     *  - TimerA interrupt disabled
-     *  - Reset TimerA flag
+     *  - Stop TimerB0
+     *  - TimerB0 interrupt disabled
+     *  - Reset TimerB0 flag
      */
-    TA0CTL  &=  ~( TASSEL | ID | MC | TAIE | TAIFG );
+    TB0CTL  &=  ~( TBSSEL | ID | MC | TBIE | TBIFG );
 
-    /* No capture mode   */
-    TA0CCTL0    &=  ~( CM );
+    /* No capture mode
+     * Set/Reset output mode   */
+    TB0CCTL0    &=  ~( CM | OUTMOD );
+    TB0CCTL0    |=   ( OUTMOD_3 );
 
-    /* Timer TA0:
-     *  - TimerA0 clock: ACLK
+    /* Timer TB0:
+     *  - TimerB0 clock: ACLK
      *  - Internal divider: /1
-     *  - TimerA0 interrupt enabled
      */
-    TA0CTL  |=   ( TASSEL__ACLK | ID_0 | TAIE );
-    TA0EX0  &=  ~( TAIDEX );
+    TB0CTL  |=   ( TBSSEL__ACLK | ID_0 );
+    TB0EX0  &=  ~( TBIDEX );
 
-    /*  Capture/Compare register to generate a delay of about 2s   */
-    TA0CCR0  =   18800;
+    /*  Capture/Compare register to generate a delay of about 1s   */
+    TB0CCR0  =   9400;
 
-    /* Timer TA0:
-     *  - TimerA0 mode: Up mode
-     *  - TimerA0 clear
+    /* Timer TB0:
+     *  - TimerB0 mode: Up mode
      */
-    TA0CTL  |=   ( MC__UP | TACLR );
+    TB0CTL  |=   ( MC__UP );
 }

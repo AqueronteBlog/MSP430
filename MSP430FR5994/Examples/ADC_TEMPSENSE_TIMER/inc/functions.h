@@ -31,7 +31,7 @@ void conf_GPIO   ( void );
 void conf_UART   ( void );
 void conf_ADC    ( void );
 void conf_REF_A  ( void );
-void conf_TimerA ( void );
+void conf_TimerB ( void );
 
 
 /**@brief Constants.
