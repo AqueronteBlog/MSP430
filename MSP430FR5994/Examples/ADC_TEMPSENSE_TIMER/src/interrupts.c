@@ -15,72 +15,6 @@
 
 
 /**
- * @brief       TIMER0_A1_ISR interrupt service routine
- * @details     Subroutine for TimerA0.
- *
- *
- * @param[in]    N/A.
- *
- * @param[out]   N/A.
- *
- *
- * @return      N/A
- *
- * @author      Manuel Caballero
- * @date        13/April/2019
- * @version     13/April/2019      The ORIGIN
- * @pre         N/A
- * @warning     N/A
- */
-#pragma vector = TIMER0_A1_VECTOR
-__interrupt void TIMER0_A1_ISR ( void )
-{
-    switch ( __even_in_range ( TA0IV, TAIV__TAIFG ) )
-    {
-        case    0x00:
-        /*  Vector 0:     No interrupt pending   */
-            break;
-
-        case    0x02:
-        /*  Vector 2:     Interrupt Source: Capture/compare 1; Interrupt Flag: TAxCCR1 CCIFG; Interrupt Priority: Highest    */
-            break;
-
-        case    0x04:
-        /*  Vector 4:     Interrupt Source: Capture/compare 2; Interrupt Flag: TAxCCR2 CCIFG     */
-            break;
-
-        case    0x06:
-        /*  Vector 6:     Interrupt Source: Capture/compare 3; Interrupt Flag: TAxCCR3 CCIFG     */
-            break;
-
-        case    0x08:
-        /*  Vector 8:     Interrupt Source: Capture/compare 4; Interrupt Flag: TAxCCR4 CCIFG     */
-            break;
-
-        case    0x0A:
-        /*  Vector A:     Interrupt Source: Capture/compare 5; Interrupt Flag: TAxCCR5 CCIFG     */
-            break;
-
-        case    0x0C:
-        /*  Vector C:     Interrupt Source: Capture/compare 6; Interrupt Flag: TAxCCR6 CCIFG     */
-            break;
-
-        case    0x0E:
-        /*  Vector E:     Interrupt Source: Timer overflow; Interrupt Flag: TAxCTL TAIFG; Interrupt Priority: Lowest     */
-            /* Start ADC12_B conversion     */
-            P1OUT       |=   LED1;              // LED1 on
-            ADC12CTL0   |=   ( ADC12ENC | ADC12SC );
-            TA0CTL      &=  ~( TAIFG );         // Reset flag
-            break;
-
-        default:
-            break;
-    }
-}
-
-
-
-/**
  * @brief       ADC12_B_ISR interrupt service routine
  * @details     Subroutine for ADC12_B.
  *
@@ -95,7 +29,7 @@ __interrupt void TIMER0_A1_ISR ( void )
  * @author      Manuel Caballero
  * @date        13/April/2019
  * @version     13/April/2019      The ORIGIN
- * @pre         N/A
+ * @pre         It should be triggered by the TimerB TB0 CCR0
  * @warning     N/A
  */
 #pragma vector = ADC12_B_VECTOR
@@ -249,8 +183,9 @@ __interrupt void ADC12_B_ISR ( void )
 
         case ADC12IV_72:
         /*  Interrupt Source: ADC12MEM30 interrupt flag, Interrupt Flag: ADC12IFG30  */
+            P1OUT      |=   LED2;                     // LED2 on
+
             myRawTemp   =    ADC12MEM30;
-            ADC12CTL0   &=  ~ADC12ENC;              // ADC12 OFF
 
             myState      =   PACK_TEMPERATURE;      // Update the state
             __bic_SR_register_on_exit( LPM3_bits ); // Exit active CPU
@@ -313,7 +248,7 @@ __interrupt void UART0_ISR ( void )
                 UCA0IE  &=  ~( UCTXIE );
                 UCA0IE  |=   ( UCRXIE );
 
-                P1OUT   &=  ~LED1;              // LED1 on
+                P1OUT   &=  ~LED2;              // LED2 on
             }
             else
             {
