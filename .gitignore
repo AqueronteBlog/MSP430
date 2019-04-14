@@ -13,3 +13,4 @@ MSP430FR5994/Examples/UART/Debug/
 MSP430FR5994/Examples/ADC_TEMPSENSE/Debug/
 MSP430FR5994/Resources/
 *.launch
+MSP430FR5994/Examples/DEVICE_ID/.settings/
