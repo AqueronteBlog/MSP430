@@ -57,7 +57,7 @@ int main(void)
     conf_UART   ();
     conf_REF_A  ();
     conf_ADC    ();
-    conf_TimerA ();
+    conf_TimerB ();
 
 
     /* All interrupts are enabled    */
