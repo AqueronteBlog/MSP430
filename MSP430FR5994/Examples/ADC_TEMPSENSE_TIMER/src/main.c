@@ -1,7 +1,7 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the internal temperature sensor.
- *              Every two seconds a new temperature conversion is triggered, the data is
+ * @details     This example shows how to work with the internal temperature sensor triggered by Timer B.
+ *              Every second a new temperature conversion is triggered, the data is
  *              processed and then, transmitted over the UART.
  *
  *              The UART is configured at 115200 baudrate.
