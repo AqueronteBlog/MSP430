@@ -1,8 +1,7 @@
 /**
  * @brief       main.c
- * @details     [TODO]This example shows how to work with the internal temperature sensor triggered by Timer B.
- *              Every second a new temperature conversion is triggered, the data is
- *              processed and then, transmitted over the UART.
+ * @details     [TODO]This example shows how to read the Device ID, hardware revision and
+ *              firmware revision parameters. Every second, these data are transmitted over the UART.
  *
  *              The UART is configured at 115200 baudrate.
  *
@@ -28,9 +27,11 @@
 
 /**@brief Constants.
  */
-#define TX_BUFF_SIZE  32                                /*!< UART buffer size                                   */
-#define DEVICE_ID         *( (unsigned int *)0x1A04 )   /*!< Temperature Sensor Calibration-30 C                */
-#define CALADC12_12V_85C  *( (unsigned int *)0x1A1C )   /*!< Temperature Sensor Calibration-85 C                */
+#define TX_BUFF_SIZE  32                                /*!< UART buffer size           */
+#define DEVICE_ID         *( (unsigned int *)0x1A04 )   /*!< Device ID                  */
+#define HARDWARE_REVISION *( (unsigned int *)0x1A06 )   /*!< Hardware revision          */
+#define FIRMWARE_REVISION *( (unsigned int *)0x1A07 )   /*!< Firmware revision          */
+
 
 /**@brief Variables.
  */
@@ -72,7 +73,7 @@ int main(void)
 
         case SEND_DATA_OVER_UART:
             /* Pack the message  */
-            sprintf ( (char*)myMessage, "Temp = %d mC\r\n", (int)( 100*0X23 ) );
+            sprintf ( (char*)myMessage, "Device ID = 0x%x (0x82A1) | HW revision: 0x%x | FW revision: 0x%x\r\n", (uint16_t)DEVICE_ID, (uint16_t)HARDWARE_REVISION, (uint16_t)FIRMWARE_REVISION );
 
             /*  Clean and Enable interrupts: Tx only     */
             UCA0IFG &=  ~( UCTXIFG );
