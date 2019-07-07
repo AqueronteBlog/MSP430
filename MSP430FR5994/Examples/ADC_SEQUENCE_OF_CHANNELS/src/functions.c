@@ -229,12 +229,12 @@ void conf_UART  ( void )
 /**
  * @brief       void conf_ADC  ( void )
  * @details     It configures the ADC12_B peripheral to work with the internal temperature
- *              sensor triggered by the timer.
+ *              sensor and V_BAT triggered by the timer.
  *
  *              · ADC12_B clock divider into 8
  *              · ADC12_B sample-and-hold source select: External source Timer TB0 CCR0
  *              · ADC12_B resolution: 12 bit
- *              · Repeat-single-channel
+ *              · Repeat-sequence-of-channels
  *              · VR+ = VREF ( 1.2V ) buffered, VR- = AVSS
  *              · SAMPCON signal is sourced from the sampling timer
  *
@@ -269,8 +269,8 @@ void conf_ADC  ( void )
      *  The sample-input signal is not inverted
      *  ADC12_B clock divider into 8
      *  ADC12_B clock source: ADC10OSC ( MODOSC ): 4.8MHz/8 = 600kHz
-     *  SAMPCON signal is sourced  from the sampling timer
-     *  Repeat-single-channel
+     *  SAMPCON signal is sourced from the sampling timer
+     *  Repeat-sequence-of-channels
      *  Binary unsigned
      *  ADC12_B resolution: 12 bit ( 14 clock cycle conversion time at least )
      *  Regular power mode where sample rate is not restricted
@@ -279,7 +279,7 @@ void conf_ADC  ( void )
     ADC12CTL0   &=  ~ADC12SHT0;
     ADC12CTL0   |=   ADC12SHT0_3;
     ADC12CTL1   &=  ~( ADC12PDIV | ADC12SHP | ADC12ISSH | ADC12DIV | ADC12SSEL | ADC12CONSEQ | ADC12SHS );
-    ADC12CTL1   |=   ( ADC12SSEL_0 | ADC12SHP_1 | ADC12DIV_7 | ADC12SHS_2 | ADC12CONSEQ_2 );
+    ADC12CTL1   |=   ( ADC12SSEL_0 | ADC12SHP_1 | ADC12DIV_7 | ADC12SHS_2 | ADC12CONSEQ_3 );
     ADC12CTL2   &=  ~( ADC12RES | ADC12DF | ADC12PWRMD );
     ADC12CTL2   |=   ADC12RES__12BIT;
 
